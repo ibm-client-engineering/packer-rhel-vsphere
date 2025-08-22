@@ -1,0 +1,23 @@
+# © Broadcom. All Rights Reserved.
+# The term “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.
+# SPDX-License-Identifier: BSD-2-Clause
+
+/*
+    DESCRIPTION:
+    CentOS Stream 9 variables used by the Packer Plugin for VMware vSphere (vsphere-iso).
+*/
+
+// Guest Operating System Metadata
+vm_guest_os_name    = "centos-stream"
+vm_guest_os_version = "9"
+
+// Virtual Machine Guest Operating System Setting
+vm_guest_os_type = "other5xLinux64Guest"
+
+// Virtual Machine Hardware Settings
+vm_firmware = "efi-secure"
+
+// Removable Media Settings
+iso_datastore_path       = "iso/linux/centos-stream/9/amd64"
+iso_content_library_item = "CentOS-Stream-9-latest-x86_64-dvd1"
+iso_file                 = "CentOS-Stream-9-latest-x86_64-dvd1.iso"

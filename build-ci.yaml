@@ -1,0 +1,223 @@
+---
+menu:
+  - entry: "Linux Distribution"
+    build:
+      var_files:
+        - "vsphere.pkrvars.hcl"
+        - "build.pkrvars.hcl"
+        - "ansible.pkrvars.hcl"
+        - "proxy.pkrvars.hcl"
+        - "common.pkrvars.hcl"
+    submenu:
+      - entry: "VMware Photon OS 5"
+        build:
+          path: "builds/linux/photon/5/"
+          var_files:
+            - "network.pkrvars.hcl"
+      - entry: "VMware Photon OS 4"
+        build:
+          path: "builds/linux/photon/4/"
+          var_files:
+            - "network.pkrvars.hcl"
+      - entry: "Debian 12"
+        build:
+          path: "builds/linux/debian/12/"
+          var_files:
+            - "network.pkrvars.hcl"
+            - "linux-storage.pkrvars.hcl"
+      - entry: "Debian 11"
+        build:
+          path: "builds/linux/debian/11/"
+          var_files:
+            - "network.pkrvars.hcl"
+            - "linux-storage.pkrvars.hcl"
+      - entry: "Ubuntu Server 24.04 LTS"
+        build:
+          path: "builds/linux/ubuntu/24-04-lts/"
+          var_files:
+            - "network.pkrvars.hcl"
+            - "linux-storage.pkrvars.hcl"
+      - entry: "Ubuntu Server 22.04 LTS"
+        build:
+          path: "builds/linux/ubuntu/22-04-lts/"
+          var_files:
+            - "network.pkrvars.hcl"
+            - "linux-storage.pkrvars.hcl"
+      - entry: "Ubuntu Server 20.04 LTS"
+        build:
+          path: "builds/linux/ubuntu/20-04-lts/"
+          var_files:
+            - "network.pkrvars.hcl"
+            - "linux-storage.pkrvars.hcl"
+      - entry: "Red Hat Enterprise Linux 9"
+        build:
+          path: "builds/linux/rhel/9/"
+          var_files:
+            - "network.pkrvars.hcl"
+            - "linux-storage.pkrvars.hcl"
+            - "rhsm.pkrvars.hcl"
+      - entry: "Red Hat Enterprise Linux 8"
+        build:
+          path: "builds/linux/rhel/8/"
+          var_files:
+            - "network.pkrvars.hcl"
+            - "linux-storage.pkrvars.hcl"
+            - "rhsm.pkrvars.hcl"
+      - entry: "Red Hat Enterprise Linux 7"
+        build:
+          path: "builds/linux/rhel/7/"
+          var_files:
+            - "network.pkrvars.hcl"
+            - "linux-storage.pkrvars.hcl"
+            - "rhsm.pkrvars.hcl"
+      - entry: "AlmaLinux OS 9"
+        build:
+          path: "builds/linux/almalinux/9/"
+          var_files:
+            - "network.pkrvars.hcl"
+            - "linux-storage.pkrvars.hcl"
+      - entry: "AlmaLinux OS 8"
+        build:
+          path: "builds/linux/almalinux/8/"
+          var_files:
+            - "network.pkrvars.hcl"
+            - "linux-storage.pkrvars.hcl"
+      - entry: "Rocky Linux 9"
+        build:
+          path: "builds/linux/rocky/9/"
+          var_files:
+            - "network.pkrvars.hcl"
+            - "linux-storage.pkrvars.hcl"
+      - entry: "Rocky Linux 8"
+        build:
+          path: "builds/linux/rocky/8/"
+          var_files:
+            - "network.pkrvars.hcl"
+            - "linux-storage.pkrvars.hcl"
+      - entry: "Oracle Linux 9"
+        build:
+          path: "builds/linux/oracle/9/"
+          var_files:
+            - "network.pkrvars.hcl"
+            - "linux-storage.pkrvars.hcl"
+      - entry: "Oracle Linux 8"
+        build:
+          path: "builds/linux/oracle/8/"
+          var_files:
+            - "network.pkrvars.hcl"
+            - "linux-storage.pkrvars.hcl"
+      - entry: "CentOS Stream 10"
+        build:
+          path: "builds/linux/centos/10/"
+          var_files:
+            - "network.pkrvars.hcl"
+            - "linux-storage.pkrvars.hcl"
+      - entry: "CentOS Stream 9"
+        build:
+          path: "builds/linux/centos/9/"
+          var_files:
+            - "network.pkrvars.hcl"
+            - "linux-storage.pkrvars.hcl"
+      - entry: "Fedora Server 41"
+        build:
+          path: "builds/linux/fedora/41/"
+          var_files:
+            - "network.pkrvars.hcl"
+            - "linux-storage.pkrvars.hcl"
+      - entry: "SUSE Linux Enterprise Server 15"
+        build:
+          path: "builds/linux/sles/15/"
+          var_files:
+            - "scc.pkrvars.hcl"
+
+  - entry: "Microsoft Windows"
+    build:
+      var_files:
+        - "vsphere.pkrvars.hcl"
+        - "ansible.pkrvars.hcl"
+        - "proxy.pkrvars.hcl"
+        - "build.pkrvars.hcl"
+        - "common.pkrvars.hcl"
+    submenu:
+      - entry: "Windows Server 2025 - All"
+        message: "all Windows Server 2025 Templates"
+        build:
+          path: "builds/windows/server/2025/"
+      - entry: "Windows Server 2025 - Standard Only"
+        message: "Microsoft Windows Server 2025 Standard Templates"
+        build:
+          path: "builds/windows/server/2025/"
+          only:
+            - vsphere-iso.windows-server-standard-dexp
+            - vsphere-iso.windows-server-standard-core
+      - entry: "Windows Server 2025 - Datacenter Only"
+        message: "Microsoft Windows Server 2025 Datacenter Templates"
+        build:
+          path: "builds/windows/server/2025/"
+          only:
+            - vsphere-iso.windows-server-datacenter-dexp
+            - vsphere-iso.windows-server-datacenter-core
+      - entry: "Windows Server 2022 - All"
+        message: "all Windows Server 2022 Templates"
+        build:
+          path: "builds/windows/server/2022/"
+      - entry: "Windows Server 2022 - Standard Only"
+        message: "Microsoft Windows Server 2022 Standard Templates"
+        build:
+          path: "builds/windows/server/2022/"
+          only:
+            - vsphere-iso.windows-server-standard-dexp
+            - vsphere-iso.windows-server-standard-core
+      - entry: "Windows Server 2022 - Datacenter Only"
+        message: "Microsoft Windows Server 2022 Datacenter Templates"
+        build:
+          path: "builds/windows/server/2022/"
+          only:
+            - vsphere-iso.windows-server-datacenter-dexp
+            - vsphere-iso.windows-server-datacenter-core
+      - entry: "Windows Server 2019 - All"
+        message: "all Windows Server 2019 Templates"
+        build:
+          path: "builds/windows/server/2019/"
+      - entry: "Windows Server 2019 - Standard Only"
+        message: "Microsoft Windows Server 2019 Standard Templates"
+        build:
+          path: "builds/windows/server/2019/"
+          only:
+            - vsphere-iso.windows-server-standard-dexp
+            - vsphere-iso.windows-server-standard-core
+      - entry: "Windows Server 2019 - Datacenter Only"
+        message: "Microsoft Windows Server 2019 Datacenter Templates"
+        build:
+          path: "builds/windows/server/2019/"
+          only:
+            - vsphere-iso.windows-server-datacenter-dexp
+            - vsphere-iso.windows-server-datacenter-core
+      - entry: "Windows 11 - All"
+        message: "all Windows 11 Templates"
+        build:
+          path: "builds/windows/desktop/11/"
+      - entry: "Windows 11 - Enterprise Only"
+        build:
+          path: "builds/windows/desktop/11/"
+          only:
+            - vsphere-iso.windows-desktop-ent
+      - entry: "Windows 11 - Professional Only"
+        build:
+          path: "builds/windows/desktop/11/"
+          only:
+            - vsphere-iso.windows-desktop-pro
+      - entry: "Windows 10 - All"
+        message: "all Windows 10 Templates"
+        build:
+          path: "builds/windows/desktop/10/"
+      - entry: "Windows 10 - Enterprise Only"
+        build:
+          path: "builds/windows/desktop/10/"
+          only:
+            - vsphere-iso.windows-desktop-ent
+      - entry: "Windows 10 - Professional Only"
+        build:
+          path: "builds/windows/desktop/10/"
+          only:
+            - vsphere-iso.windows-desktop-pro

@@ -1,0 +1,352 @@
+# © Broadcom. All Rights Reserved.
+# The term “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.
+# SPDX-License-Identifier: BSD-2-Clause
+
+##############################################################################
+##
+## Auto-generated .gitlab-ci.yml for building Packer Example for vSphere
+##
+## Do not modify this file directly, either:
+##
+##     - Modify the source build-ci.yaml.
+##     - Modify the template build-ci.tmpl.
+##
+## then run the following command to re-create the .gitlab-ci.yml file:
+##
+##     gomplate -c build-ci.yaml -f build-ci.tmpl -o .gitlab-ci.yml
+##
+##############################################################################
+
+variables:
+    SCRIPT_PATH: "${CI_PROJECT_DIR}"
+    CONFIG_PATH: "${CI_PROJECT_DIR}/config"
+    INPUT_PATH: ""
+    BUILD_VARS: ""
+    EXTRA_VAR_FILES: ""
+    BUILD_ONLY: ""
+
+##############################################################################
+
+.packer-build:
+    stage: build
+    #tags:
+    #    - packer
+    before_script:
+        - "packer init \"$INPUT_PATH\""
+        - "packer validate -var-file=\"$CONFIG_PATH/vsphere.pkrvars.hcl\" -var-file=\"$CONFIG_PATH/build.pkrvars.hcl\" -var-file=\"$CONFIG_PATH/ansible.pkrvars.hcl\" -var-file=\"$CONFIG_PATH/proxy.pkrvars.hcl\" -var-file=\"$CONFIG_PATH/common.pkrvars.hcl\" -var-file=\"$CONFIG_PATH/$BUILD_VARS\" ${EXTRA_VAR_FILES} \"$INPUT_PATH\""
+    script:
+        - "packer build -force -on-error=ask -var-file=\"$CONFIG_PATH/vsphere.pkrvars.hcl\" -var-file=\"$CONFIG_PATH/build.pkrvars.hcl\" -var-file=\"$CONFIG_PATH/ansible.pkrvars.hcl\" -var-file=\"$CONFIG_PATH/proxy.pkrvars.hcl\" -var-file=\"$CONFIG_PATH/common.pkrvars.hcl\" -var-file=\"$CONFIG_PATH/$BUILD_VARS\" ${EXTRA_VAR_FILES} ${BUILD_ONLY} \"$INPUT_PATH\""
+    when: manual
+
+##############################################################################
+
+VMware-Photon-OS-5:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/photon/5/"
+        BUILD_VARS: "linux-photon-5.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl"
+
+##############################################################################
+
+VMware-Photon-OS-4:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/photon/4/"
+        BUILD_VARS: "linux-photon-4.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl"
+
+##############################################################################
+
+Debian-12:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/debian/12/"
+        BUILD_VARS: "linux-debian-12.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl -var-file=$CONFIG_PATH/linux-storage.pkrvars.hcl"
+
+##############################################################################
+
+Debian-11:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/debian/11/"
+        BUILD_VARS: "linux-debian-11.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl -var-file=$CONFIG_PATH/linux-storage.pkrvars.hcl"
+
+##############################################################################
+
+Ubuntu-Server-24.04-LTS:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/ubuntu/24-04-lts/"
+        BUILD_VARS: "linux-ubuntu-24-04-lts.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl -var-file=$CONFIG_PATH/linux-storage.pkrvars.hcl"
+
+##############################################################################
+
+Ubuntu-Server-22.04-LTS:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/ubuntu/22-04-lts/"
+        BUILD_VARS: "linux-ubuntu-22-04-lts.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl -var-file=$CONFIG_PATH/linux-storage.pkrvars.hcl"
+
+##############################################################################
+
+Ubuntu-Server-20.04-LTS:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/ubuntu/20-04-lts/"
+        BUILD_VARS: "linux-ubuntu-20-04-lts.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl -var-file=$CONFIG_PATH/linux-storage.pkrvars.hcl"
+
+##############################################################################
+
+Red-Hat-Enterprise-Linux-9:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/rhel/9/"
+        BUILD_VARS: "linux-rhel-9.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl -var-file=$CONFIG_PATH/linux-storage.pkrvars.hcl -var-file=$CONFIG_PATH/rhsm.pkrvars.hcl"
+
+##############################################################################
+
+Red-Hat-Enterprise-Linux-8:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/rhel/8/"
+        BUILD_VARS: "linux-rhel-8.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl -var-file=$CONFIG_PATH/linux-storage.pkrvars.hcl -var-file=$CONFIG_PATH/rhsm.pkrvars.hcl"
+
+##############################################################################
+
+Red-Hat-Enterprise-Linux-7:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/rhel/7/"
+        BUILD_VARS: "linux-rhel-7.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl -var-file=$CONFIG_PATH/linux-storage.pkrvars.hcl -var-file=$CONFIG_PATH/rhsm.pkrvars.hcl"
+
+##############################################################################
+
+AlmaLinux-OS-9:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/almalinux/9/"
+        BUILD_VARS: "linux-almalinux-9.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl -var-file=$CONFIG_PATH/linux-storage.pkrvars.hcl"
+
+##############################################################################
+
+AlmaLinux-OS-8:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/almalinux/8/"
+        BUILD_VARS: "linux-almalinux-8.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl -var-file=$CONFIG_PATH/linux-storage.pkrvars.hcl"
+
+##############################################################################
+
+Rocky-Linux-9:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/rocky/9/"
+        BUILD_VARS: "linux-rocky-9.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl -var-file=$CONFIG_PATH/linux-storage.pkrvars.hcl"
+
+##############################################################################
+
+Rocky-Linux-8:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/rocky/8/"
+        BUILD_VARS: "linux-rocky-8.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl -var-file=$CONFIG_PATH/linux-storage.pkrvars.hcl"
+
+##############################################################################
+
+Oracle-Linux-9:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/oracle/9/"
+        BUILD_VARS: "linux-oracle-9.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl -var-file=$CONFIG_PATH/linux-storage.pkrvars.hcl"
+
+##############################################################################
+
+Oracle-Linux-8:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/oracle/8/"
+        BUILD_VARS: "linux-oracle-8.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl -var-file=$CONFIG_PATH/linux-storage.pkrvars.hcl"
+
+##############################################################################
+
+CentOS-Stream-10:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/centos/10/"
+        BUILD_VARS: "linux-centos-10.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl -var-file=$CONFIG_PATH/linux-storage.pkrvars.hcl"
+
+##############################################################################
+
+CentOS-Stream-9:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/centos/9/"
+        BUILD_VARS: "linux-centos-9.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl -var-file=$CONFIG_PATH/linux-storage.pkrvars.hcl"
+
+##############################################################################
+
+Fedora-Server-41:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/fedora/41/"
+        BUILD_VARS: "linux-fedora-41.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/network.pkrvars.hcl -var-file=$CONFIG_PATH/linux-storage.pkrvars.hcl"
+
+##############################################################################
+
+SUSE-Linux-Enterprise-Server-15:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/linux/sles/15/"
+        BUILD_VARS: "linux-sles-15.pkrvars.hcl"
+        EXTRA_VAR_FILES: "-var-file=$CONFIG_PATH/scc.pkrvars.hcl"
+
+##############################################################################
+
+Windows-Server-2025-All:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/windows/server/2025/"
+        BUILD_VARS: "windows-server-2025.pkrvars.hcl"
+
+##############################################################################
+
+Windows-Server-2025-Standard-Only:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/windows/server/2025/"
+        BUILD_VARS: "windows-server-2025.pkrvars.hcl"
+        BUILD_ONLY: "--only vsphere-iso.windows-server-standard-dexp,vsphere-iso.windows-server-standard-core"
+
+##############################################################################
+
+Windows-Server-2025-Datacenter-Only:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/windows/server/2025/"
+        BUILD_VARS: "windows-server-2025.pkrvars.hcl"
+        BUILD_ONLY: "--only vsphere-iso.windows-server-datacenter-dexp,vsphere-iso.windows-server-datacenter-core"
+
+##############################################################################
+
+Windows-Server-2022-All:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/windows/server/2022/"
+        BUILD_VARS: "windows-server-2022.pkrvars.hcl"
+
+##############################################################################
+
+Windows-Server-2022-Standard-Only:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/windows/server/2022/"
+        BUILD_VARS: "windows-server-2022.pkrvars.hcl"
+        BUILD_ONLY: "--only vsphere-iso.windows-server-standard-dexp,vsphere-iso.windows-server-standard-core"
+
+##############################################################################
+
+Windows-Server-2022-Datacenter-Only:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/windows/server/2022/"
+        BUILD_VARS: "windows-server-2022.pkrvars.hcl"
+        BUILD_ONLY: "--only vsphere-iso.windows-server-datacenter-dexp,vsphere-iso.windows-server-datacenter-core"
+
+##############################################################################
+
+Windows-Server-2019-All:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/windows/server/2019/"
+        BUILD_VARS: "windows-server-2019.pkrvars.hcl"
+
+##############################################################################
+
+Windows-Server-2019-Standard-Only:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/windows/server/2019/"
+        BUILD_VARS: "windows-server-2019.pkrvars.hcl"
+        BUILD_ONLY: "--only vsphere-iso.windows-server-standard-dexp,vsphere-iso.windows-server-standard-core"
+
+##############################################################################
+
+Windows-Server-2019-Datacenter-Only:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/windows/server/2019/"
+        BUILD_VARS: "windows-server-2019.pkrvars.hcl"
+        BUILD_ONLY: "--only vsphere-iso.windows-server-datacenter-dexp,vsphere-iso.windows-server-datacenter-core"
+
+##############################################################################
+
+Windows-11-All:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/windows/desktop/11/"
+        BUILD_VARS: "windows-desktop-11.pkrvars.hcl"
+
+##############################################################################
+
+Windows-11-Enterprise-Only:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/windows/desktop/11/"
+        BUILD_VARS: "windows-desktop-11.pkrvars.hcl"
+        BUILD_ONLY: "--only vsphere-iso.windows-desktop-ent"
+
+##############################################################################
+
+Windows-11-Professional-Only:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/windows/desktop/11/"
+        BUILD_VARS: "windows-desktop-11.pkrvars.hcl"
+        BUILD_ONLY: "--only vsphere-iso.windows-desktop-pro"
+
+##############################################################################
+
+Windows-10-All:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/windows/desktop/10/"
+        BUILD_VARS: "windows-desktop-10.pkrvars.hcl"
+
+##############################################################################
+
+Windows-10-Enterprise-Only:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/windows/desktop/10/"
+        BUILD_VARS: "windows-desktop-10.pkrvars.hcl"
+        BUILD_ONLY: "--only vsphere-iso.windows-desktop-ent"
+
+##############################################################################
+
+Windows-10-Professional-Only:
+    extends: .packer-build
+    variables:
+        INPUT_PATH: "$SCRIPT_PATH/builds/windows/desktop/10/"
+        BUILD_VARS: "windows-desktop-10.pkrvars.hcl"
+        BUILD_ONLY: "--only vsphere-iso.windows-desktop-pro"
+
+##############################################################################
+

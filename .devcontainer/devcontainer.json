@@ -1,0 +1,23 @@
+{
+  "name": "Packer Examples for vSphere",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "features": {},
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "EditorConfig.EditorConfig",
+        "esbenp.prettier-vscode",
+        "GitHub.remotehub",
+        "GitHub.vscode-pull-request-github",
+        "GitLab.gitlab-workflow",
+        "hashicorp.hcl",
+        "hashicorp.terraform",
+        "ms-vscode.powershell",
+        "redhat.ansible",
+        "streetsidesoftware.code-spell-checker"
+      ]
+    }
+  }
+}
