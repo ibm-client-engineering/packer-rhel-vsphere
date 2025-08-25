@@ -180,7 +180,7 @@ Download the latest release from GitHub.
 ## Clone the Repository
 
 ```shell
-git clone https://github.ibm.com/mdavis5/packer-rhel-vsphere.git
+git clone https://github.com/ibm-client-engineering/packer-rhel-vsphere.git
 cd packer-rhel-vsphere
 ```
 
