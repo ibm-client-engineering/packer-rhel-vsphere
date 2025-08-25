@@ -25,7 +25,7 @@ jobs:
           VALIDATE_BASH: true
           VALIDATE_BASH_EXEC: true
           VALIDATE_DOCKERFILE_HADOLINT: true
-          DOCKERFILE_HADOLINT_FILE_NAME: .hadolint.yml
+          #DOCKERFILE_HADOLINT_FILE_NAME: .hadolint.yml
           VALIDATE_GITHUB_ACTIONS: true
           VALIDATE_NATURAL_LANGUAGE: true
           VALIDATE_POWERSHELL: true

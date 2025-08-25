@@ -13,7 +13,15 @@ SPDX-License-Identifier: BSD-2-Clause
 This repository is based off of [Packer Examples for vSphere](https://github.com/vmware/packer-examples-for-vsphere). The repository has been updated and tested for building
 RHEL 8 & 9 images on vSphere, though the rest of the examples are still present here. This can be used to automate the creation of virtual machine images for VMware vSphere environments.
 
-# Environment Requirements
+## Environment Requirements
+
+### Red Hat Partner Connect Account
+
+While you can download the RHEL ISOs from a free Red Hat developer account, this build is configured to perform an online installation. This means you do not need to download or upload the full ISO, which saves a lot of time and bandwidth. However, this online install method requires a Red Hat Activation Key and an Organization ID, which are only available through a Red Hat Partner Connect account or a paid subscription. IBMers should have access to a Parter Connect account.
+
+See below section [Red Hat Subscription Manager](#red-hat-subscription-manager) for details on how to verify if you have the proper type of account.
+
+### Platform
 
 The project is tested on the following platforms:
 
@@ -21,7 +29,7 @@ The project is tested on the following platforms:
 | --------------- | --------------------- |
 | VMware vSphere  | 7.0 Update 3D or later|
 
-## Operating Systems
+### Operating Systems
 
 The project is tested on the following operating systems for the Packer host :
 
@@ -29,7 +37,20 @@ The project is tested on the following operating systems for the Packer host :
 | :----------------- | :-------- | :--------------------- |
 | RHEL               | 8.7       | `x86_64`               |
 
-## Packer
+### Access to vSphere
+
+You will need access to VMware vSphere with proper [privileges](https://vmware.github.io/packer-examples-for-vsphere/getting-started/privileges/).
+
+#### Accessing VMware vSphere via IBM TechZone
+**If you are an IBMer or Business Partner**, you can request access to a vSphere environment through IBM TechZone that will automatically give you the privileges needed.
+
+- Navigate to the [VMware on IBM Cloud Environments](https://techzone.ibm.com/collection/tech-zone-certified-base-images/journey-vmware-on-ibm-cloud-environments).
+
+- Select Request vCenter access (OCP Gym) to get a reservation.
+
+Tip: If you are using TechZone, it is recommended to enabled VPN when making the reservation (this avoids the need for access to the environment through guacamole).
+
+### Packer
 
 | Component                                                        | Version   | Description      |
 | :--------------------------------------------------------------- | :-------- | :--------------- |
@@ -38,17 +59,10 @@ The project is tested on the following operating systems for the Packer host :
 | Packer Plugin for VMware vSphere | >= 1.4.2  | By HashiCorp     |
 | Packer Plugin for Git      | >= 0.6.3  | Community Plugin |
 
-## IBM TechZone Access to vSphere
 
-If you are an IBMer or Business Parter, you can request access to vSphere through IBM TechZone.
+#### Installation
 
-[VMware on IBM Cloud Environments](https://techzone.ibm.com/collection/tech-zone-certified-base-images/journey-vmware-on-ibm-cloud-environments)
-
-Select `Request vCenter access (OCP Gym)`
-
-### Installation
-
-#### RHEL 8
+##### RHEL 8
 
 You can install Packer on RHEL 8 using the following commands:
 
@@ -58,7 +72,7 @@ sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashi
 sudo yum install -y packer
 ```
 
-#### Ubuntu
+##### Ubuntu
 
 You can install Packer on Ubuntu using the following commands:.
 
@@ -90,7 +104,7 @@ https://apt.releases.hashicorp.com $(lsb_release -cs) main" > /etc/apt/sources.l
 sudo apt update && sudo apt install packer
 ```
 
-#### macOS
+##### macOS
 
 You can install Packer on macOS using [Homebrew][homebrew].
 
@@ -99,14 +113,14 @@ brew tap hashicorp/tap
 brew install hashicorp/tap/packer
 ```
 
-#### Note
+##### Note
 
 Required plugins are automatically downloaded and initialized when using `./build.sh`.
 
 For disconnected sites you may download the plugins and place these same directory as your Packer
 executable `/usr/local/bin` or `$HOME/.packer.d/plugins`.
 
-# Additional Packages
+### Additional Packages
 
 The following additional software packages must be installed on the operating system running Packer.
 
@@ -119,9 +133,9 @@ The following additional software packages must be installed on the operating sy
 | terraform     | >= 1.10.0 | Infrastructure as Code (IaC) tool by HashiCorp  | [Terraform Documentation](https://www.terraform.io/docs) |
 | xorriso       | >= 1.5.6  | ISO filesystem images creator for Linux         | [xorriso Man Page](https://linux.die.net/man/1/xorriso) |
 
-## Installation
+#### Installation
 
-### RHEL 8
+##### RHEL 8
 
 **Packages:**
 
@@ -139,7 +153,7 @@ chmod +x gomplate_linux-amd64
 sudo mv gomplate_linux-amd64 /usr/local/bin/gomplate
 ```
 
-### Ubuntu
+##### Ubuntu
 
 **Packages:**
 
@@ -162,7 +176,7 @@ chmod +x gomplate_linux-amd64
 sudo mv gomplate_linux-amd64 /usr/local/bin/gomplate
 ```
 
-### macOS
+##### macOS
 
 **Packages:**
 
@@ -173,18 +187,18 @@ echo "terraform $(terraform version | awk -Fv '{print $2}' | head -n 1)"
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-# Get the Project
+## Get the Project
 
 Download the latest release from GitHub.
 
-## Clone the Repository
+### Clone the Repository
 
 ```shell
 git clone https://github.com/ibm-client-engineering/packer-rhel-vsphere.git
 cd packer-rhel-vsphere
 ```
 
-## Project Structure
+### Project Structure
 
 The directory structure of the project.
 
@@ -197,13 +211,13 @@ The directory structure of the project.
 | **`scripts`**   | Contains the scripts to initialize and prepare Windows machine image builds.             |
 | **`terraform`** | Contains example Terraform plans to create a custom role and test machine image builds.  |
 
-# Guest Operating Systems
+## Guest Operating Systems
 
 Download the guest operating system ISOs using the download script (`./download.sh`) or directly from the publisher.
 
 **Note:** The download script does not work for RHEL ISO downloads. Go directly to the publisher and download the `boot` ISO for RHEL 8 or 9. The size of the ISO should be around 1GB.
 
-## How to Download RHEL 8 or 9 Boot ISO
+### How to Download RHEL 8 or 9 Boot ISO
 This guide provides instructions for downloading the Red Hat Enterprise Linux (RHEL) 8 or 9 boot image ISO. This image is a minimal installer that will download additional packages from the internet during installation.
 
 **Step 1: Create a Red Hat Developer Account**
@@ -246,7 +260,7 @@ Boot ISO: A small file (typically a few hundred megabytes) that contains only th
 
 DVD ISO: A much larger file (several gigabytes) that contains the full installation and a wide selection of software packages. This allows for an offline installation. **This packer build is not currently configured to use an offline installation.**
 
-## Using the Download Script
+### Using the Download Script
 
 1. Start a download by running the download script (`./download.sh`).
 
@@ -320,11 +334,11 @@ Verification of checksum successful for ubuntu-24.04-live-server-amd64.iso.
 Would you like to (c)ontinue or (q)uit?
 ```
 
-### Demo
+#### Demo
 
 ![](./docs/assets/images/download.gif)
 
-## Download Script Options
+### Download Script Options
 
 You can use the following options with the script.
 
@@ -334,16 +348,16 @@ You can use the following options with the script.
 | `--json` | `-j`, `-J` | Override the default JSON configuration file. |
 | `--deps` | `-d`, `-D` | Check the the required dependencies.          |
 
-## Upload ISOs
+### Upload ISOs
 
 Upload the guest operating system ISO file to a datastore in VMware vSphere. If you wish, create a directory called 'iso' and
 upload the file there.
 
 ![](./docs/assets/images/vsphere-iso-upload.png)
 
-# Configure Your Environment
+## Configure Your Environment
 
-## Example Variables
+### Example Variables
 
 The project includes example variables files that you can use as a starting point for your own
 configuration.
@@ -360,9 +374,9 @@ directory.
 The `config/` folder is the default folder. You can override the default by passing an alternate
 value as the first argument.
 
-## Configuration Variables
+### Configuration Variables
 
-### Datastore
+#### Datastore
 
 Edit the `config/common.pkrvars.hcl` file to configure the location of the datastore for the boot ISO.
 
@@ -381,7 +395,7 @@ iso_content_library_item = ""
 iso_file                 = "rhel-9.4-x86_64-boot.iso"
 ```
 
-### Build
+#### Build
 
 Edit the `config/build.pkrvars.hcl` file to configure the credentials for the default account on
 machine images.
@@ -432,7 +446,7 @@ Your public key has been saved in /Users/example/.ssh/id_ecdsa.pub.
 
 The content of the public key, `build_key`, is the key added to the `~/.ssh/authorized_keys` file of the `build_username` on the Linux guest operating systems.
 
-### Ansible
+#### Ansible
 
 Edit the `config/ansible.pkrvars.hcl` file to configure the credentials for the Ansible account on
 Linux machine images.
@@ -448,7 +462,7 @@ ansible_key      = "<public_key>"
 
 A random password is auto-generated for the Ansible user.
 
-### Common
+#### Common
 
 Edit the `config/common.pkrvars.hcl` file to configure the following common variables:
 
@@ -488,7 +502,7 @@ common_shutdown_timeout  = "15m"
 common_hcp_packer_registry_enabled = false
 ```
 
-### Data Source
+#### Data Source
 
 The default provisioning data source for Linux machine image builds is `http`. This is used to serve the kickstart files to the Linux guest operating system during the build.
 
@@ -498,29 +512,7 @@ The default provisioning data source for Linux machine image builds is `http`. T
 common_data_source = "http"
 ```
 
-#### Firewall
-
-Packer includes a built-in HTTP server that is used to serve the kickstart files for Linux
-machine image builds.
-
-If a firewall is enabled on your Packer host, you will need to open `common_http_port_min` through
-`common_http_port_max` ports (default is 8000-8099).
-
-**RHEL 8:**
-
-```shell
-sudo firewall-cmd --zone=public --permanent --add-port=8000-8099/tcp
-sudo firewall-cmd --reload
-```
-
-**Ubuntu:**
-
-```shell
-sudo ufw allow 8000:8099/tcp
-sudo ufw reload
-```
-
-### HTTP Binding
+#### HTTP Binding
 
 If you need to define a specific IPv4 address from your host for Packer's built-in HTTP server,
 modify the `common_http_ip` variable from `null` to a `string` value that matches an IP address on
@@ -532,7 +524,7 @@ your Packer host.
 common_http_ip = "192.168.252.2"
 ```
 
-### VMware vSphere
+#### VMware vSphere
 
 Edit the `config/vsphere.pkrvars.hcl` file to configure the following:
 
@@ -552,6 +544,28 @@ vsphere_network               = "gym-0600010stv-xxxxxxxx-segment"
 vsphere_folder                = "ocp-gym/gym-0600010stv-xxxxxxxx"
 vsphere_resource_pool         = "Cluster Resource Pool/Gym Member Resource Pool/gym-0600010stv-xxxxxxxx"
 vsphere_set_host_for_datastore_uploads = false
+```
+
+### Firewall
+
+Packer includes a built-in HTTP server that is used to serve the kickstart files for Linux
+machine image builds.
+
+If a firewall is enabled on your Packer host, you will need to open `common_http_port_min` through
+`common_http_port_max` ports (default is 8000-8099).
+
+**RHEL 8:**
+
+```shell
+sudo firewall-cmd --zone=public --permanent --add-port=8000-8099/tcp
+sudo firewall-cmd --reload
+```
+
+**Ubuntu:**
+
+```shell
+sudo ufw allow 8000:8099/tcp
+sudo ufw reload
 ```
 
 ### Red Hat Subscription Manager
@@ -602,9 +616,9 @@ rhsm_key = "packer-rhel9-key"
 
 **Note:** The activation key is OS release specific. An activation key for RHEL 8 will not work for RHEL 9 and vice versa.
 
-# Build the Images
+## Build the Images
 
-## Using the Build Script
+### Using the Build Script
 
 Command to build a RHEL 8 server.
 
@@ -620,7 +634,7 @@ nohup ./build.sh --os Linux --dist "Red Hat Enterprise Linux" --version 9 --auto
 
 Both of these commands start the build in the background, you can follow the output with `tail -f nohup.out`.
 
-## How to Kill a Running Build
+### How to Kill a Running Build
 
 Assuming there are no other bash commands running in the background, use the following to kill a running build.
 
@@ -630,7 +644,7 @@ pkill packer && pkill bash
 
 The build script is configured to leave partially or failed VMs running on vSphere. This is so you can troubleshoot easier.
 
-## Build complete
+### Build complete
 
 When the build is complete you will see a template in vSphere.
 
