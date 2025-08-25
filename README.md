@@ -53,9 +53,9 @@ Select `Request vCenter access (OCP Gym)`
 You can install Packer on RHEL 8 using the following commands:
 
 ```shell
-yum install -y yum-utils
-yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
-yum install -y packer
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+sudo yum install -y packer
 ```
 
 #### Ubuntu
