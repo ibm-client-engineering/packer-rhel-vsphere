@@ -17,7 +17,7 @@ jobs:
         uses: github/super-linter@b807e99ddd37e444d189cfd2c2ca1274d8ae8ef1 # v7
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          DEFAULT_BRANCH: "develop"
+          DEFAULT_BRANCH: "master"
           DISABLE_ERRORS: false
           FILTER_REGEX_EXCLUDE: "build.tmpl"
           IGNORE_GITIGNORED_FILES: true
