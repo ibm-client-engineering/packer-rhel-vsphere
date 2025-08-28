@@ -411,6 +411,8 @@ build_password_encrypted = "$6$KspR8KgZFVxDOiiF$n4hhyeSGgamrz25mqvOfnK5xm6blwDJf
 build_key                = "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBADwXV3rbRCWwhSr6aMkHukV5O7OGAEyUtAerj2anJHm3mwbOxlBU/uO4f0ELqo2GJcTALMC0aFrbvu9qonIH5VF7wBBfCP1cS5B92sUagVV9ldI/uo89e/7dVYC9maPsFaZq2G0/PLU0hZKOohq99Oxc2RMSiJaaenX/hNqx5xYSaK+CA== packer@example.com"
 ```
 
+**Optional**: You can use the default username and password instead of generating a new `build_password` and `build_password_encrypted`.
+
 To generate a SHA-512 encrypted password for the `build_password_encrypted` using OpenSSL.
 
 ```shell
@@ -444,6 +446,8 @@ Your identification has been saved in /Users/example/.ssh/id_ecdsa.
 Your public key has been saved in /Users/example/.ssh/id_ecdsa.pub.
 ```
 
+Copy the contents of `~/.ssh/id_ecdsa.pub` and set the `build_key` in `build.pkrvars.hcl`.
+
 The content of the public key, `build_key`, is the key added to the `~/.ssh/authorized_keys` file of the `build_username` on the Linux guest operating systems.
 
 #### Ansible
@@ -457,6 +461,8 @@ Linux machine images.
 ansible_username = "ansible"
 ansible_key      = "<public_key>"
 ```
+
+Copy the contents of `~/.ssh/id_ecdsa.pub` (generated above) and set the `ansible_key` in `ansible.pkrvars.hcl`.
 
 **Ansible User Password:**
 
@@ -512,7 +518,7 @@ The default provisioning data source for Linux machine image builds is `http`. T
 common_data_source = "http"
 ```
 
-#### HTTP Binding
+#### HTTP Binding (Optional)
 
 If you need to define a specific IPv4 address from your host for Packer's built-in HTTP server,
 modify the `common_http_ip` variable from `null` to a `string` value that matches an IP address on
