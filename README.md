@@ -72,7 +72,8 @@ sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashi
 sudo yum install -y packer
 ```
 
-##### Ubuntu
+<details>
+<summary>Ubuntu</summary>
 
 You can install Packer on Ubuntu using the following commands:.
 
@@ -103,8 +104,10 @@ https://apt.releases.hashicorp.com $(lsb_release -cs) main" > /etc/apt/sources.l
 ```shell
 sudo apt update && sudo apt install packer
 ```
+</details>
 
-##### macOS
+<details>
+<summary>macOS</summary>
 
 You can install Packer on macOS using [Homebrew][homebrew].
 
@@ -112,6 +115,7 @@ You can install Packer on macOS using [Homebrew][homebrew].
 brew tap hashicorp/tap
 brew install hashicorp/tap/packer
 ```
+</details>
 
 ##### Note
 
@@ -153,7 +157,8 @@ chmod +x gomplate_linux-amd64
 sudo mv gomplate_linux-amd64 /usr/local/bin/gomplate
 ```
 
-##### Ubuntu
+<details>
+<summary>Ubuntu</summary>
 
 **Packages:**
 
@@ -175,8 +180,10 @@ wget -q https://github.com/hairyhenderson/gomplate/releases/download/v${GOMPLATE
 chmod +x gomplate_linux-amd64
 sudo mv gomplate_linux-amd64 /usr/local/bin/gomplate
 ```
+</details>
 
-##### macOS
+<details>
+<summary>macOS</summary>
 
 **Packages:**
 
@@ -186,6 +193,7 @@ echo "ansible-core $(ansible --version | grep 'ansible.*core' | awk '{print $3}'
 echo "terraform $(terraform version | awk -Fv '{print $2}' | head -n 1)"
 export PATH="$HOME/.local/bin:$PATH"
 ```
+</details>
 
 ## Get the Project
 
@@ -261,6 +269,8 @@ Boot ISO: A small file (typically a few hundred megabytes) that contains only th
 DVD ISO: A much larger file (several gigabytes) that contains the full installation and a wide selection of software packages. This allows for an offline installation. **This packer build is not currently configured to use an offline installation.**
 
 ### Using the Download Script
+
+**Note:** The download script does NOT work for RHEL.
 
 1. Start a download by running the download script (`./download.sh`).
 
@@ -567,12 +577,14 @@ sudo firewall-cmd --zone=public --permanent --add-port=8000-8099/tcp
 sudo firewall-cmd --reload
 ```
 
-**Ubuntu:**
+<details>
+<summary>Ubuntu:</summary>
 
 ```shell
 sudo ufw allow 8000:8099/tcp
 sudo ufw reload
 ```
+</details>
 
 ### Red Hat Subscription Manager
 
