@@ -27,7 +27,7 @@ This build supports installation using either a boot ISO or the full DVD ISO for
 
 If you have access to a Partner Connect account, using the boot ISO is the recommended and most efficient option.
 
-See below section [Red Hat Subscription Manager](#red-hat-subscription-manager) for details on how to verify if you have a Partner Connect account.
+See below section [Red Hat Subscription Manager](#red-hat-installation-methods-online-and-offline) for details on how to verify if you have a Partner Connect account.
 
 ### Platform
 
