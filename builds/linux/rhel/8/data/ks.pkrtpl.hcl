@@ -4,8 +4,13 @@
 
 # Red Hat Enterprise Linux 8
 
-### Installs from Red Hat Subscription Manager, this is required when using the boot ISO
+%{ if boot_iso }
+### Installs from Red Hat Subscription Manager
 rhsm --organization=${rhsm_org} --activation-key=${rhsm_key}
+%{ else }
+### Installs for DVD
+cdrom
+%{ endif }
 
 ### Performs the kickstart installation in text mode.
 ### By default, kickstart installations are performed in graphical mode.

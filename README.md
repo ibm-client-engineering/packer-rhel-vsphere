@@ -15,11 +15,19 @@ RHEL 8 & 9 images on vSphere, though the rest of the examples are still present 
 
 ## Environment Requirements
 
-### Red Hat Partner Connect Account
+### Red Hat ISO Options: Boot vs Full DVD
 
-While you can download the RHEL ISOs from a free Red Hat developer account, this build is configured to perform an online installation. This means you do not need to download or upload the full ISO, which saves a lot of time and bandwidth. However, this online install method requires a Red Hat Activation Key and an Organization ID, which are only available through a Red Hat Partner Connect account or a paid subscription. IBMers should have access to a Parter Connect account.
+This build supports installation using either a boot ISO or the full DVD ISO for RHEL.
 
-See below section [Red Hat Subscription Manager](#red-hat-subscription-manager) for details on how to verify if you have the proper type of account.
+- **Boot ISO:**
+ Much smaller in size (~1GB), making it significantly faster to download and upload to vSphere. However, it requires an **online installation**, which means you must provide a valid Red Hat Activation Key and Organization ID. These credentials are typically available through a **Red Hat Partner Connect account** or a paid subscription.
+
+- **Full DVD ISO:**
+ Over 10GB in size, which can take considerable time to download and upload to your virtualization platform. This ISO supports offline installation, so it does not require RHSM Activation Key and Organization ID. Use this option if you do not have access to a Partner Connect account.
+
+If you have access to a Partner Connect account, using the boot ISO is the recommended and most efficient option.
+
+See below section [Red Hat Subscription Manager](#red-hat-subscription-manager) for details on how to verify if you have a Partner Connect account.
 
 ### Platform
 
@@ -49,6 +57,62 @@ You will need access to VMware vSphere with proper [privileges](https://vmware.g
 - Select Request vCenter access (OCP Gym) to get a reservation.
 
 Tip: If you are using TechZone, it is recommended to enabled VPN when making the reservation (this avoids the need for access to the environment through guacamole).
+
+### Download RHEL 8 or 9 Boot ISO
+This guide provides instructions for downloading the Red Hat Enterprise Linux (RHEL) 8 or 9 image ISO. Remember to
+select your image (boot vs full DVD) based on whether you have Partner Connect access to an activation key.
+
+**Step 1: Create a Red Hat Developer Account**
+
+Before you can download any RHEL images, you need a free Red Hat Developer account.
+
+1. Navigate to the Red Hat Developer program website.
+
+2. Click "Register" or "Join the Red Hat Developer Program."
+
+3. Fill out the required information to create your account.
+
+4. Confirm your email address.
+
+**Step 2: Navigate to the RHEL Downloads Page**
+
+Once you have an account, you can access the download portal.
+
+1. Log in to the Red Hat Customer Portal.
+
+2. Go to the Product Downloads section.
+
+3. On the product list, select "Red Hat Enterprise Linux".
+
+**Step 3: Select the Correct ISO Image**
+
+The RHEL downloads page offers several options. You'll want to choose the boot ISO for your needs. **YOU MAY HAVE TO SCROLL DOWN TO SEE PREVIOUS RHEL VERSIONS**
+
+1. On the RHEL downloads page, select the desired version (e.g., RHEL 9 or RHEL 8).
+
+2. Under the list of available downloads, select either "Boot ISO" or "Full DVD" version.
+
+3. The file name will typically follow a pattern like `rhel-9.x-x86_64-boot.iso` or `rhel-8.x-x86_64-boot.iso` for the boot ISO and `rhel-9.x-x86_64-dvd.iso` or `rhel-9.x-x86_64-dvd.iso` for the full DVD.
+
+4. Click the "Download" button next to the appropriate file to begin the download.
+
+**Note on ISO types:**
+
+ Boot ISO: A small file (typically one gigabyte) that contains only the core installer. It requires an active internet connection during installation to fetch the necessary packages. This is ideal for network installations.
+
+ DVD ISO: A much larger file (several gigabytes) that contains the full installation and a wide selection of software packages. This allows for an offline installation.
+
+### Upload ISOs
+
+While the file downloads, you can continue to the next steps and start setting up packer on the bastion. Periodically check
+the download and when it's finished come back to this section and start the upload to vSphere. The upload can take over an hour
+especially if using the full DVD iso and offline installation method.
+
+Upload the guest operating system ISO file to a datastore in VMware vSphere. Create a directory called `iso` and
+upload the file there.
+
+![](./docs/assets/images/vsphere-iso-upload.png)
+
 
 ### Packer
 
@@ -204,6 +268,7 @@ Download the latest release from GitHub.
 ```shell
 git clone https://github.com/ibm-client-engineering/packer-rhel-vsphere.git
 cd packer-rhel-vsphere
+
 ```
 
 ### Project Structure
@@ -218,152 +283,6 @@ The directory structure of the project.
 | **`manifests`** | Manifests created after the completion of the machine image builds.                      |
 | **`scripts`**   | Contains the scripts to initialize and prepare Windows machine image builds.             |
 | **`terraform`** | Contains example Terraform plans to create a custom role and test machine image builds.  |
-
-## Guest Operating Systems
-
-Download the guest operating system ISOs using the download script (`./download.sh`) or directly from the publisher.
-
-**Note:** The download script does not work for RHEL ISO downloads. Go directly to the publisher and download the `boot` ISO for RHEL 8 or 9. The size of the ISO should be around 1GB.
-
-### How to Download RHEL 8 or 9 Boot ISO
-This guide provides instructions for downloading the Red Hat Enterprise Linux (RHEL) 8 or 9 boot image ISO. This image is a minimal installer that will download additional packages from the internet during installation.
-
-**Step 1: Create a Red Hat Developer Account**
-
-Before you can download any RHEL images, you need a free Red Hat Developer account.
-
-1. Navigate to the Red Hat Developer program website.
-
-2. Click "Register" or "Join the Red Hat Developer Program."
-
-3. Fill out the required information to create your account.
-
-4. Confirm your email address.
-
-**Step 2: Navigate to the RHEL Downloads Page**
-
-Once you have an account, you can access the download portal.
-
-1. Log in to the Red Hat Customer Portal.
-
-2. Go to the Product Downloads section.
-
-3. On the product list, select "Red Hat Enterprise Linux".
-
-**Step 3: Select the Correct ISO Image**
-
-The RHEL downloads page offers several options. You'll want to choose the boot ISO for your needs.
-
-1. On the RHEL downloads page, select the desired version (e.g., RHEL 9 or RHEL 8).
-
-2. Under the list of available downloads, look for the image type labeled "Boot ISO" or "Minimal Installer."
-
-3. The file name will typically follow a pattern like rhel-9.x-x86_64-boot.iso or rhel-8.x-x86_64-boot.iso.
-
-4. Click the "Download" button next to the appropriate file to begin the download.
-
-Note on ISO types:
-
-Boot ISO: A small file (typically a few hundred megabytes) that contains only the core installer. It requires an active internet connection during installation to fetch the necessary packages. This is ideal for network installations.
-
-DVD ISO: A much larger file (several gigabytes) that contains the full installation and a wide selection of software packages. This allows for an offline installation. **This packer build is not currently configured to use an offline installation.**
-
-### Using the Download Script
-
-**Note:** The download script does NOT work for RHEL.
-
-1. Start a download by running the download script (`./download.sh`).
-
-```shell
-./download.sh
-```
-
-The downloads are supported by a JSON configuration file (`project.json`) that includes the details for each guest operating system.
-
-2. Select a guest operating system.
-
-```shell
-Select a guest operating system:
-
-1: Linux
-2: Windows
-
-Enter q to quit or i for info.
-```
-
-3. Select a distribution (or edition).
-
-```shell
-Select a Linux distribution:
-
-1: AlmaLinux OS
-2: CentOS
-3: Debian
-4: Fedora Server
-5: Oracle Linux
-6: Red Hat Enterprise Linux
-7: Rocky Linux
-8: SUSE Linux Enterprise Server
-9: Ubuntu Server
-10: VMware Photon OS
-
-Enter b to go back, or q to quit.
-```
-
-4. Select a version.
-
-```shell
-Select a version:
-
-1: Ubuntu Server 24.04 LTS
-2: Ubuntu Server 22.04 LTS
-3: Ubuntu Server 20.04 LTS
-
-Enter b to go back, or q to quit.
-
-Select a version: 1
-```
-
-5. The download will start.
-
-```shell
-Downloading: ubuntu-24.04-live-server-amd64.iso => iso/linux/ubuntu-server/24.04-lts/amd64.
-
-% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                Dload  Upload   Total   Spent    Left  Speed
-100 2627M  100 2627M    0     0  20.4M      0  0:02:08  0:02:08 --:--:-- 19.7M
-% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                Dload  Upload   Total   Spent    Left  Speed
-100   299  100   299    0     0    535      0 --:--:-- --:--:-- --:--:--   535
-
-Verifying: sha256 checksum for ubuntu-24.04-live-server-amd64.iso.
-Verification of checksum successful for ubuntu-24.04-live-server-amd64.iso.
-        - Expected: 8762f7e74e4d64d72fceb5f70682e6b069932deedb4949c6975d0f0fe0a91be3
-        - Actual:   8762f7e74e4d64d72fceb5f70682e6b069932deedb4949c6975d0f0fe0a91be3
-
-Would you like to (c)ontinue or (q)uit?
-```
-
-#### Demo
-
-![](./docs/assets/images/download.gif)
-
-### Download Script Options
-
-You can use the following options with the script.
-
-| Option   | Short Form | Description                                   |
-| -------- | ---------- | --------------------------------------------- |
-| `--help` | `-h`, `-H` | Display the help for the script.              |
-| `--json` | `-j`, `-J` | Override the default JSON configuration file. |
-| `--deps` | `-d`, `-D` | Check the the required dependencies.          |
-
-### Upload ISOs
-
-Upload the guest operating system ISO file to a datastore in VMware vSphere. If you wish, create a directory called 'iso' and
-upload the file there.
-
-![](./docs/assets/images/vsphere-iso-upload.png)
 
 ## Configure Your Environment
 
@@ -395,6 +314,9 @@ common_iso_datastore               = "gym-0600010stv-5x09g1zg-storage"
 common_iso_content_library         = ""
 common_iso_content_library_enabled = false
 ```
+
+Note: If you're part of a curated vSphere environment (such as IBM TechZone), you may be assigned specific datastores and resource pools. The value for `common_iso_datastore` should reflect the name of the datastore you've been granted access to.
+In the example above, "gym-0600010stv-5x09g1zg-storage" is a sample name provided to a specific group — your assigned datastore name may differ.
 
 Edit either `config/linux-rhel-9.pkrvars.hcl` or `config/linux-rhel-8.pkrvars.hcl` appropriately and
 update the ISO path and file for each guest operating system in the configuration variables.

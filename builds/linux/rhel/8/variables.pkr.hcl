@@ -22,6 +22,7 @@ variable "rhsm_username" {
 variable "rhsm_password" {
   type        = string
   description = "The password for Red Hat Subscription Management."
+  sensitive   = true
 
   validation {
     # Check if the string contains a single quote.
@@ -34,14 +35,14 @@ variable "rhsm_password" {
 
 variable "rhsm_org" {
   type        = string
-  description = "The Red Hat Subscription Management (RHSM) organization ID. This is a unique numerical identifier that links your system to your company's Red Hat subscription account. It ensures that the system registers correctly under your organization."
-  sensitive   = true
+  description = "The Red Hat Subscription Management Organization ID."
+  default     = null # Make the variable optional
 }
 
 variable "rhsm_key" {
   type        = string
-  description = "The specific activation key created in the Red Hat Customer Portal. This key is used during the Kickstart installation to automatically register the system, attach a valid subscription, and enable the necessary repositories (like BaseOS, AppStream, and CodeReady Builder) without requiring a username and password. This key is release specific (e.g. a rhel 8 key will not work for rhel 9 build)"
-  sensitive   = true
+  description = "The Red Hat Subscription Management Activation Key."
+  default     = null # Make the variable optional
 }
 
 // vSphere Credentials

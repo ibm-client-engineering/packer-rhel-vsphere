@@ -22,6 +22,7 @@ variable "rhsm_username" {
 variable "rhsm_password" {
   type        = string
   description = "The password for Red Hat Subscription Management."
+  sensitive   = true
 
   validation {
     # Check if the string contains a single quote.
@@ -34,14 +35,14 @@ variable "rhsm_password" {
 
 variable "rhsm_org" {
   type        = string
-  description = "The organization for Red Hat Subscription Manager."
-  sensitive   = true
+  description = "The Red Hat Subscription Management Organization ID."
+  default     = null
 }
 
 variable "rhsm_key" {
   type        = string
-  description = "The key for Red Hat Subscription Manager."
-  sensitive   = true
+  description = "The Red Hat Subscription Management Activation Key."
+  default     = null
 }
 
 // vSphere Credentials

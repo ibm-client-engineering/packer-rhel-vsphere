@@ -346,6 +346,39 @@ validate_linux_username() {
     fi
 }
 
+validate_rhsm_offline() {
+  local iso_file_path="$1"
+  local rhsm_vars_path="$2"
+
+  # Extract iso_file value
+  local iso_file
+  iso_file=$(grep -E '^\s*iso_file\s*=' "$iso_file_path" | sed -E 's/.*=\s*"([^"]+)".*/\1/')
+
+  # Check if iso_file contains "boot"
+  if [[ "$iso_file" == *boot* ]]; then
+    # Check for uncommented rhsm_org and rhsm_key
+    local rhsm_org_present
+    local rhsm_key_present
+
+    rhsm_org_present=$(grep -E '^\s*rhsm_org\s*=' "$rhsm_vars_path")
+    rhsm_key_present=$(grep -E '^\s*rhsm_key\s*=' "$rhsm_vars_path")
+
+    if [[ -z "$rhsm_org_present" || -z "$rhsm_key_present" ]]; then
+      echo -e "\n\033[31mRed Hat Subscription Management (RHSM) credentials are missing.\033[0m"
+      echo -e "\n\033[33mDetected ISO file: \033[36m$iso_file\033[0m"
+      echo -e "\nThis ISO appears to be a \033[35mboot ISO\033[0m, which requires RHSM credentials for offline registration."
+      echo -e "\nPlease ensure the following variables are defined and uncommented in your \033[36]$rhsm_vars_path\033[0m file:"
+      echo -e "\n  • \033[32mrhsm_org\033[0m  - Your Red Hat organization ID"
+      echo -e "\n  • \033[32mrhsm_key\033[0m  - Your Red Hat activation key"
+      echo -e "\nExample:"
+      echo -e "\n  rhsm_org = \"1234567\""
+      echo -e "  rhsm_key = \"my-activation-key\""
+      echo -e "\n\033[31mBuild aborted due to missing RHSM credentials.\033[0m"
+      exit 1
+    fi
+  fi
+}
+
 # Get the settings from the JSON file.
 logging_enabled=$(get_settings build_logging_enabled)
 logging_path=$(get_settings build_logging_path)
@@ -854,6 +887,7 @@ select_build() {
     "Red Hat Enterprise Linux")
         var_files=("vsphere_vars" "build_vars" "ansible_vars" "proxy_vars" "common_vars" "network_vars" "storage_vars" "rshm_vars" "BUILD_VARS")
         validate_linux_username "$config_path/build.pkrvars.hcl"
+        validate_rhsm_offline "$config_path/linux-rhel-$version.pkrvars.hcl" "$config_path/rhsm.pkrvars.hcl"
         printf "Starting the build of %s %s...\n\n" "$dist" "$version"
         #command="packer build -force -on-error=ask $debug_option"
         command="packer build -force -on-error=abort $debug_option"

@@ -59,6 +59,7 @@ locals {
       rhsm_password            = var.rhsm_password
       rhsm_org                 = var.rhsm_org
       rhsm_key                 = var.rhsm_key
+      boot_iso                 = local.boot_iso
       vm_guest_os_language     = var.vm_guest_os_language
       vm_guest_os_keyboard     = var.vm_guest_os_keyboard
       vm_guest_os_timezone     = var.vm_guest_os_timezone
@@ -97,6 +98,8 @@ locals {
   vm_name            = "${var.vm_guest_os_family}-${var.vm_guest_os_name}-${var.vm_guest_os_version}-${local.build_version}"
   bucket_name        = replace("${var.vm_guest_os_family}-${var.vm_guest_os_name}-${var.vm_guest_os_version}", ".", "")
   bucket_description = "${var.vm_guest_os_family} ${var.vm_guest_os_name} ${var.vm_guest_os_version}"
+
+  boot_iso = can(regex("boot", var.iso_file))
 }
 
 //  BLOCK: source

@@ -4,8 +4,13 @@
 
 # Red Hat Enterprise Linux Server 9
 
+%{ if boot_iso }
 ### Installs from Red Hat Subscription Manager
 rhsm --organization=${rhsm_org} --activation-key=${rhsm_key}
+%{ else }
+### Installs for DVD
+cdrom
+%{ endif }
 
 ### Performs the kickstart installation in text mode.
 ### By default, kickstart installations are performed in graphical mode.
