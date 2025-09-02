@@ -508,13 +508,18 @@ sudo ufw reload
 ```
 </details>
 
-### Red Hat Subscription Manager
+### Red Hat Installation Methods (Online and Offline)
 
-This Packer build uses an online installation method for Red Hat Enterprise Linux (RHEL). This approach leverages a minimal boot ISO image to fetch all necessary packages directly from Red Hat's Content Delivery Network (CDN) during the build process.
+This Packer build supports both online and offline installation methods for Red Hat Enterprise Linux (RHEL). Both methods are designed to build a complete system image, but they differ in how they obtain the necessary packages.
 
-#### Prerequisites
+In either scenario, you must provide a **username and password** that will be used for the base operating system's build user.
 
-To successfully complete this build, you must have access to a valid RHEL subscription and provide the following credentials:
+#### Online Installation
+
+This method uses a minimal boot ISO image to fetch all packages directly from Red Hat's Content Delivery Network (CDN) during the build. This ensures you are always installing the latest, most up-to-date packages and security patches. This approach also eliminates the need to download and upload a large 10+ GB full DVD ISO, making the process faster and more efficient.
+
+**Prerequisites:**
+To successfully complete an online build, you must have an active, paid Red Hat subscription or a Partner Connect account and provide your Red Hat Subscription Management credentials.
 
 - **RHSM Credentials:** Your Red Hat Subscription Management username and password. This is typically your login credentials to Red Hat.
 
@@ -522,39 +527,26 @@ To successfully complete this build, you must have access to a valid RHEL subscr
 
 - **Activation Key:** A specific key used to register and attach the system to your subscription, ensuring it can access the software repositories.
 
-Note: This method is distinct from an offline installation, which would use a full DVD ISO containing all packages and would not require an internet connection or activation credentials during the build itself. The online method not only ensures you are installing the latest, most up-to-date packages and security patches but also prevents you from having to download and upload a 10+ GB full DVD ISO, which makes the entire process faster to implement.
+#### Offline Installation
 
-#### How to Get Organization ID and Activation Key
-
-Your Organization ID and Activation Key are associated with a paid Red Hat customer subscription account or a **Partner Connect account** (available to IBMers). You cannot obtain these with a free Red Hat Developer account.
-
-To retrieve these values, follow these steps in the Red Hat Customer Portal:
-
-1. Log in to the **Red Hat Customer Portal** with your customer subscription or Partner Connect account.
-
-2. Navigate to the **Subscription Management** section.
-
-3. Click on **Activation Keys** in the left-hand menu.
-
-4. You will find your **Organization ID** listed at the top of the page.
-
-5. You can either use an existing activation key or create a new one on this page.
-
-#### Configure the variables
-
-Edit the `config/rhsm.pkrvars.hcl` file to configure the following:
+#### Configure the Variables
+Regardless of your chosen installation method, you will need to edit the config/rhsm.pkrvars.hcl file to provide the necessary information. For an online installation, you must fill in all fields. For an offline installation, you can leave the rhsm_org and rhsm_key fields empty.
 
 ```hcl
 // Red Hat Subscription Manager Credentials
 rhsm_username = "myusername"
 rhsm_password = "myredhatpasswordformyusername"
 
-// Red Hat Subscription Manager Activation
+// Red Hat Subscription Manager Activation (required for online install only)
 rhsm_org = "12123429"
 rhsm_key = "packer-rhel9-key"
 ```
 
-**Note:** The activation key is OS release specific. An activation key for RHEL 8 will not work for RHEL 9 and vice versa.
+This method uses a full DVD ISO image that contains all the packages needed to install RHEL. This approach is ideal for environments with no internet access or for times when you need to ensure the build is from a specific version without any subsequent updates. With this method, you still need to provide your Red Hat credentials to set up the system's user account, but no activation key or internet connection is required during the build process itself.
+
+**Note:** The activation key is OS release-specific. An activation key for RHEL 8 will not work for RHEL 9 and vice versa.
+
+Note: This method is distinct from an offline installation, which would use a full DVD ISO containing all packages and would not require an internet connection or activation credentials during the build itself. The online method not only ensures you are installing the latest, most up-to-date packages and security patches but also prevents you from having to download and upload a 10+ GB full DVD ISO, which makes the entire process faster to implement.
 
 ## Build the Images
 
