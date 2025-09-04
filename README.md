@@ -15,20 +15,6 @@ RHEL 8 & 9 images on vSphere, though the rest of the examples are still present 
 
 ## Environment Requirements
 
-### Red Hat ISO Options: Boot vs Full DVD
-
-This build supports installation using either a boot ISO or the full DVD ISO for RHEL.
-
-- **Boot ISO:**
- Much smaller in size (~1GB), making it significantly faster to download and upload to vSphere. However, it requires an **online installation**, which means you must provide a valid Red Hat Activation Key and Organization ID. These credentials are typically available through a **Red Hat Partner Connect account** or a paid subscription.
-
-- **Full DVD ISO:**
- Over 10GB in size, which can take considerable time to download and upload to your virtualization platform. This ISO supports offline installation, so it does not require RHSM Activation Key and Organization ID. Use this option if you do not have access to a Partner Connect account.
-
-If you have access to a Partner Connect account, using the boot ISO is the recommended and most efficient option.
-
-See below section [Red Hat Subscription Manager](#red-hat-installation-methods-online-and-offline) for details on how to verify if you have a Partner Connect account.
-
 ### Platform
 
 The project is tested on the following platforms:
@@ -57,62 +43,6 @@ You will need access to VMware vSphere with proper [privileges](https://vmware.g
 - Select Request vCenter access (OCP Gym) to get a reservation.
 
 Tip: If you are using TechZone, it is recommended to enabled VPN when making the reservation (this avoids the need for access to the environment through guacamole).
-
-### Download RHEL 8 or 9 Boot ISO
-This guide provides instructions for downloading the Red Hat Enterprise Linux (RHEL) 8 or 9 image ISO. Remember to
-select your image (boot vs full DVD) based on whether you have Partner Connect access to an activation key.
-
-**Step 1: Create a Red Hat Developer Account**
-
-Before you can download any RHEL images, you need a free Red Hat Developer account.
-
-1. Navigate to the Red Hat Developer program website.
-
-2. Click "Register" or "Join the Red Hat Developer Program."
-
-3. Fill out the required information to create your account.
-
-4. Confirm your email address.
-
-**Step 2: Navigate to the RHEL Downloads Page**
-
-Once you have an account, you can access the download portal.
-
-1. Log in to the Red Hat Customer Portal.
-
-2. Go to the Product Downloads section.
-
-3. On the product list, select "Red Hat Enterprise Linux".
-
-**Step 3: Select the Correct ISO Image**
-
-The RHEL downloads page offers several options. You'll want to choose the boot ISO for your needs. **YOU MAY HAVE TO SCROLL DOWN TO SEE PREVIOUS RHEL VERSIONS**
-
-1. On the RHEL downloads page, select the desired version (e.g., RHEL 9 or RHEL 8).
-
-2. Under the list of available downloads, select either "Boot ISO" or "Full DVD" version.
-
-3. The file name will typically follow a pattern like `rhel-9.x-x86_64-boot.iso` or `rhel-8.x-x86_64-boot.iso` for the boot ISO and `rhel-9.x-x86_64-dvd.iso` or `rhel-9.x-x86_64-dvd.iso` for the full DVD.
-
-4. Click the "Download" button next to the appropriate file to begin the download.
-
-**Note on ISO types:**
-
- Boot ISO: A small file (typically one gigabyte) that contains only the core installer. It requires an active internet connection during installation to fetch the necessary packages. This is ideal for network installations.
-
- DVD ISO: A much larger file (several gigabytes) that contains the full installation and a wide selection of software packages. This allows for an offline installation.
-
-### Upload ISOs
-
-While the file downloads, you can continue to the next steps and start setting up packer on the bastion. Periodically check
-the download and when it's finished come back to this section and start the upload to vSphere. The upload can take over an hour
-especially if using the full DVD iso and offline installation method.
-
-Upload the guest operating system ISO file to a datastore in VMware vSphere. Create a directory called `iso` and
-upload the file there.
-
-![](./docs/assets/images/vsphere-iso-upload.png)
-
 
 ### Packer
 
@@ -283,6 +213,192 @@ The directory structure of the project.
 | **`manifests`** | Manifests created after the completion of the machine image builds.                      |
 | **`scripts`**   | Contains the scripts to initialize and prepare Windows machine image builds.             |
 | **`terraform`** | Contains example Terraform plans to create a custom role and test machine image builds.  |
+
+## Download ISOs
+
+Download the guest operating system ISOs using the download script (`./download.sh`) or directly from the publisher.
+It is recommended to do this from the bastion host running in vSphere as the network speeds will decrease the time
+significantly.
+
+### RHSM API Offline Token
+
+In order to download the ISOs directly from Red Hat, an RHSM API offline token is required.
+
+1. Go to the [Red Hat API Tokens page](https://access.redhat.com/management/api) on the Red Hat Customer Portal.
+
+2. Under `Generate an offline token`, click `GENERATE TOKEN`.
+
+![](./docs/assets/images/redhat-offline-token.png)
+
+3. An offline token is generated, keep that token in a handy place for the next step.
+
+### Using the Download Script
+
+1. Start a download by running the download script (`./download.sh`).
+
+```shell
+./download.sh
+```
+
+The downloads are supported by a JSON configuration file (`project.json`) that includes the details for each guest operating system.
+
+2. Select a guest operating system.
+
+```shell
+Select a guest operating system:
+
+1: Linux
+
+Enter q to quit or i for info.
+
+Select a guest operating system: 1
+```
+
+3. Select a distribution (or edition).
+
+```shell
+Select a Linux distribution:
+
+1: CentOS Stream
+2: Red Hat Enterprise Linux
+
+Enter b to go back, or q to quit.
+
+Enter a number of the Linux distribution: 2
+```
+
+4. Select a version.
+
+```shell
+Select a version:
+
+1: Red Hat Enterprise Linux 9.5
+2: Red Hat Enterprise Linux 9.4
+3: Red Hat Enterprise Linux 8.10
+
+Enter b to go back, or q to quit.
+
+Select a version: 3
+```
+5. Enter your offline token from above and repeat.
+
+```shell
+Enter your Red Hat Subscription Manager offline token:
+Enter your Red Hat Subscription Manager offline token again:
+```
+
+6. The download will start.
+
+```shell
+Downloading: rhel-8.10-x86_64-dvd.iso => iso/linux/red-hat-enterprise-linux/8.10/amd64.
+
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 13.2G  100 13.2G    0     0   235M      0  0:00:57  0:00:57 --:--:--  220M
+
+Verifying: sha256 checksum for rhel-8.10-x86_64-dvd.iso.
+Verification of checksum successful for rhel-8.10-x86_64-dvd.iso.
+        - Expected: 9b3c8e31bc2cdd2de9cf96abb3726347f5840ff3b176270647b3e66639af291b
+        - Actual:   9b3c8e31bc2cdd2de9cf96abb3726347f5840ff3b176270647b3e66639af291b
+
+
+Would you like to (c)ontinue or (q)uit?
+```
+
+#### Demo
+
+![](./docs/assets/images/download.gif)
+
+#### Download Script Options
+
+You can use the following options with the script.
+
+| Option   | Short Form | Description                                   |
+| -------- | ---------- | --------------------------------------------- |
+| `--help` | `-h`, `-H` | Display the help for the script.              |
+| `--json` | `-j`, `-J` | Override the default JSON configuration file. |
+| `--deps` | `-d`, `-D` | Check the the required dependencies.          |
+
+## Upload ISOs
+
+Upload the guest operating system ISOs using the upload script (`./upload.sh`) or directly upload to vSphere.
+It is recommended to do this from the bastion host running in vSphere as the network speeds will decrease the time
+significantly.
+
+### Install `govc`
+
+For the upload script to work, the VMWare `govc` command line tool must be installed.
+
+```shell
+curl -L https://github.com/vmware/govmomi/releases/latest/download/govc_Linux_x86_64.tar.gz | sudo tar -C /usr/local/bin -xz
+sudo chmod +x /usr/local/bin/govc
+```
+
+### Using the Upload Script
+
+<details>
+<summary>IBM TechZone Tip</summary>
+Use the following commands to speed up the running of the script in an IBM TechZone environment.
+
+---
+
+Install `yq`
+```shell
+sudo curl -L https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -o /usr/local/bin/yq
+sudo chmod +x /usr/local/bin/yq
+yq --version
+```
+
+Run the following commands to set environment variables for upload from `~/vmware-ipi.yaml`.
+```shell
+export GOVC_USERNAME=$(yq e '.vsphere_username' ~/vmware-ipi.yaml) \
+&& export GOVC_PASSWORD=$(yq e '.vsphere_password' ~/vmware-ipi.yaml) \
+&& export GOVC_URL="https://$(yq e '.vsphere_hostname' ~/vmware-ipi.yaml)" \
+&& export GOVC_DATASTORE=$(yq e '.vsphere_datastore' ~/vmware-ipi.yaml)
+```
+
+</details>
+
+1. Start a download by running the download script (`./download.sh`).
+
+```shell
+./upload.sh
+```
+
+2. Select an ISO file to upload.
+
+```shell
+Found the following ISO files:
+  1) rhel-9.5-x86_64-boot.iso
+  2) rhel-8.10-x86_64-dvd.iso
+Please select an ISO to upload (1-2):
+```
+
+3. Enter details for connecting to vSphere:
+
+```shell
+Enter the vCenter URL [Default: https://vcenter.example.com]:
+Enter your vCenter username: myuser@techzone.local
+Enter your vCenter password:
+```
+
+4. Enter the target directory to use on the datastore (default is `iso`):
+
+```shell
+Enter the target folder in the datastore [Default: iso]:
+```
+
+5. The upload will start.
+
+```shell
+Validating credentials and connection to vCenter at https://ocpgym-vc.techzone.ibm.local...
+Connection successful. Proceeding with upload...
+Checking for datastore folder 'ISOs' and creating if necessary...
+Uploading 'rhel-9.5-x86_64-boot.iso' to vSphere datastore 'gym-0600010stv-5x09g1zg-storage'...
+Target path: '[gym-0600010stv-5x09g1zg-storage] ISOs/rhel-9.5-x86_64-boot.iso'
+[03-09-25 15:31:19] Uploading... OK
+Upload complete!
+```
 
 ## Configure Your Environment
 
@@ -527,7 +643,9 @@ To successfully complete an online build, you must have an active, paid Red Hat 
 
 - **Activation Key:** A specific key used to register and attach the system to your subscription, ensuring it can access the software repositories.
 
-#### Offline Installation
+**Note:** The activation key is OS release-specific. An activation key for RHEL 8 will not work for RHEL 9 and vice versa.
+
+#### Offline Installation (default)
 
 #### Configure the Variables
 Regardless of your chosen installation method, you will need to edit the config/rhsm.pkrvars.hcl file to provide the necessary information. For an online installation, you must fill in all fields. For an offline installation, you can leave the rhsm_org and rhsm_key fields empty.
@@ -538,15 +656,11 @@ rhsm_username = "myusername"
 rhsm_password = "myredhatpasswordformyusername"
 
 // Red Hat Subscription Manager Activation (required for online install only)
-rhsm_org = "12123429"
-rhsm_key = "packer-rhel9-key"
+#rhsm_org = "12123429"
+#rhsm_key = "packer-rhel9-key"
 ```
 
 This method uses a full DVD ISO image that contains all the packages needed to install RHEL. This approach is ideal for environments with no internet access or for times when you need to ensure the build is from a specific version without any subsequent updates. With this method, you still need to provide your Red Hat credentials to set up the system's user account, but no activation key or internet connection is required during the build process itself.
-
-**Note:** The activation key is OS release-specific. An activation key for RHEL 8 will not work for RHEL 9 and vice versa.
-
-Note: This method is distinct from an offline installation, which would use a full DVD ISO containing all packages and would not require an internet connection or activation credentials during the build itself. The online method not only ensures you are installing the latest, most up-to-date packages and security patches but also prevents you from having to download and upload a 10+ GB full DVD ISO, which makes the entire process faster to implement.
 
 ## Build the Images
 

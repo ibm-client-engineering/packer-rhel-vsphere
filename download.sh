@@ -950,7 +950,3 @@ while true; do
     [qQ]*) exit ;;
     esac
 done
-
-# TODO:
-# - Add support for SUSE Enterprise Linux Server download.
-# - Add support for Windows Server 2025 when GA.

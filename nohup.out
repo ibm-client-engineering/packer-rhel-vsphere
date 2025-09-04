@@ -1,0 +1,47 @@
+[0;32m✔ Selected OS:[0m Linux
+[0;32m✔ Selected distribution:[0m Red Hat Enterprise Linux
+[0;32m✔ Selected version:[0m 8
+
+Build a Red Hat Enterprise Linux 8 virtual machine image for VMware vSphere?
+
+[33mWarning:[0m The branch name contains a slash ('[33m/[0m') which may cause issues with the build.
+
+
+Auto-continue is enabled. Skipping user prompt...
+
+Initializing HashiCorp Packer and the required plugins...
+Starting the build of Red Hat Enterprise Linux 8...
+
+Error: Could not guess format of /home/admin/packer-rhel-vsphere/config/
+
+A var file must be suffixed with `.hcl` or `.json`.
+
+Error: Could not guess format of /home/admin/packer-rhel-vsphere/config/
+
+A var file must be suffixed with `.hcl` or `.json`.
+
+Error: Could not guess format of /home/admin/packer-rhel-vsphere/config/
+
+A var file must be suffixed with `.hcl` or `.json`.
+
+Error: Could not guess format of /home/admin/packer-rhel-vsphere/config/
+
+A var file must be suffixed with `.hcl` or `.json`.
+
+Error: Could not guess format of /home/admin/packer-rhel-vsphere/config/
+
+A var file must be suffixed with `.hcl` or `.json`.
+
+Error: Could not guess format of /home/admin/packer-rhel-vsphere/config/
+
+A var file must be suffixed with `.hcl` or `.json`.
+
+Error: Could not guess format of /home/admin/packer-rhel-vsphere/config/
+
+A var file must be suffixed with `.hcl` or `.json`.
+
+Error: Could not guess format of /home/admin/packer-rhel-vsphere/config/
+
+A var file must be suffixed with `.hcl` or `.json`.
+
+
