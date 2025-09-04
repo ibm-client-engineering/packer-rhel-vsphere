@@ -12,7 +12,7 @@
 
 // vSphere Credentials
 
-variable "vsphere_endpoint" {
+variable "vsphere_hostname" {
   type        = string
   description = "The fully qualified domain name or IP address of the vCenter Server instance."
 }

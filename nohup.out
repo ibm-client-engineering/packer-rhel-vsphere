@@ -1,47 +1,448 @@
+++++ follow_link ./build.sh
+++++ file=./build.sh
+++++ '[' -L ./build.sh ']'
+++++ echo ./build.sh
++++ dirname ./build.sh
+++ cd .
+++ pwd
++ script_path=/home/admin/packer-rhel-vsphere
++ run_check_dependencies=false
++ run_check_jq=false
++ run_show_help=false
++ '[' -z '' ']'
+++ cd /home/admin/packer-rhel-vsphere/config
+++ pwd
++ config_path=/home/admin/packer-rhel-vsphere/config
++ json_path=project.json
++ check_jq
++ cmd=jq
++ command -v jq
++ check_ansible
++ cmd=ansible
+++ jq -r --arg cmd ansible '.dependencies[] | select(.name == $cmd ) | .version_requirement' project.json
++ local 'deps_version=>= 2.15.0'
+++ echo '>= 2.15.0'
+++ tr -d '>='
+++ xargs
++ required_version=2.15.0
++ command -v ansible
+++ tr -d '[]'
+++ ansible --version
+++ head -n 1
+++ awk '{print $3}'
++ installed_version=2.16.3
+++ head -n1
+++ printf '%s\n' 2.15.0 2.16.3
+++ sort -V
++ '[' 2.15.0 '!=' 2.15.0 ']'
++ check_packer
++ cmd=packer
+++ jq -r --arg cmd packer '.dependencies[] | select(.name == $cmd ) | .version_requirement' project.json
++ local 'deps_version=>= 1.12.0'
+++ xargs
+++ echo '>= 1.12.0'
+++ tr -d '>='
++ required_version=1.12.0
++ command -v packer
+++ awk '{print $2}'
+++ packer version
+++ tr -d v
+++ head -n 1
++ installed_version=1.13.1
+++ printf '%s\n' 1.12.0 1.13.1
+++ head -n1
+++ sort -V
++ '[' 1.12.0 '!=' 1.12.0 ']'
++ show_command=0
++ os=
++ dist=
++ version=
++ edition=
++ auto_continue=false
++ (( 8 ))
++ case "$1" in
++ os=Linux
++ shift 2
++ (( 6 ))
++ case "$1" in
++ dist='Red Hat Enterprise Linux'
++ shift 2
++ (( 4 ))
++ case "$1" in
++ version=8
++ shift 2
++ (( 2 ))
++ case "$1" in
++ auto_continue=true
++ shift
++ (( 1 ))
++ case "$1" in
++ debug=1
++ debug_option=-debug
++ shift
++ (( 0 ))
++ false
++ false
+++ jq -r '.os[] | .name' project.json
++ os_names=Linux
++ os_array=($os_names)
+++ get_settings build_logging_enabled
+++ local field=build_logging_enabled
+++ jq -r .settings.build_logging_enabled project.json
++ logging_enabled=false
+++ get_settings build_logging_path
+++ local field=build_logging_path
+++ jq -r .settings.build_logging_path project.json
++ logging_path=
+++ get_settings build_logging_filename
+++ local field=build_logging_filename
+++ jq -r .settings.build_logging_filename project.json
++ logfile_filename=build.log
++ false
++ select_os
++ [[ -n Linux ]]
++ [[ !  Linux  =~  Linux  ]]
++ echo -e '\033[0;32m✔ Selected OS:\033[0m Linux'
 [0;32m✔ Selected OS:[0m Linux
++ select_distribution
++ case "$os" in
+++ jq -r --arg os Linux '.os[] | select(.name == $os) | .distributions[] | .description' project.json
++ dist_descriptions='Red Hat Enterprise Linux
+CentOS Stream'
++ '[' -z 'Red Hat Enterprise Linux
+CentOS Stream' ']'
++ IFS='
+'
++ read -rd '' -a dist_array
++ IFS='
+'
++ dist_array=($(sort <<<"${dist_array[*]}"))
+++ sort
++ unset IFS
++ [[ -n Red Hat Enterprise Linux ]]
++ [[ !  CentOS Stream Red Hat Enterprise Linux  =~  Red Hat Enterprise Linux  ]]
++ echo -e '\033[0;32m✔ Selected distribution:\033[0m Red Hat Enterprise Linux'
 [0;32m✔ Selected distribution:[0m Red Hat Enterprise Linux
++ select_version
++ [[ Red Hat Enterprise Linux == *\W\i\n\d\o\w\s* ]]
+++ jq -r --arg os Linux --arg dist 'Red Hat Enterprise Linux' '.os[] | select(.name == $os) | .distributions[] | select(.description == $dist) | .versions | to_entries[] | select(.value[] | .enabled == "true") | .key' project.json
++ version_descriptions='9
+9
+9
+8
+8'
++ IFS='
+'
++ read -rd '' -a version_array
+++ echo '9
+9
+9
+8
+8'
+++ sort -r
++ [[ -n 8 ]]
++ [[ !  9 9 9 8 8  =~  8  ]]
++ echo -e '\033[0;32m✔ Selected version:\033[0m 8'
 [0;32m✔ Selected version:[0m 8
++ [[ Red Hat Enterprise Linux == *\W\i\n\d\o\w\s* ]]
++ select_build
++ [[ Red Hat Enterprise Linux == *\R\e\d\ \H\a\t* ]]
++ dist_name=rhel
++ [[ Red Hat Enterprise Linux == *\U\b\u\n\t\u* ]]
+++ echo 8
+++ tr '[:upper:]' '[:lower:]'
++ version=8
+++ tr '[:upper:]' '[:lower:]'
+++ echo Linux
+++ echo rhel
+++ tr '[:upper:]' '[:lower:]'
++ INPUT_PATH=/home/admin/packer-rhel-vsphere/builds/linux/rhel/8/
++ '[' '!' -d /home/admin/packer-rhel-vsphere/builds/linux/rhel/8/ ']'
++ BUILD_PATH=linux/rhel/8/
+++ echo linux/rhel/8
+++ tr -s /
+++ tr / -
++ BUILD_VARS=linux-rhel-8.pkrvars.hcl
++ echo -e '\nBuild a Red Hat Enterprise Linux 8 virtual machine image for VMware vSphere?'
 
 Build a Red Hat Enterprise Linux 8 virtual machine image for VMware vSphere?
++ printf '\n\033[33mWarning:\033[0m The branch name contains a slash ('\''\033[33m/\033[0m'\'') which may cause issues with the build.\n\n'
 
 [33mWarning:[0m The branch name contains a slash ('[33m/[0m') which may cause issues with the build.
 
++ true
++ '[' true = true ']'
++ printf '\nAuto-continue is enabled. Skipping user prompt...\n'
 
 Auto-continue is enabled. Skipping user prompt...
++ break
++ printf '\nInitializing HashiCorp Packer and the required plugins...\n'
 
 Initializing HashiCorp Packer and the required plugins...
++ packer init /home/admin/packer-rhel-vsphere/builds/linux/rhel/8/
++ [[ Linux == *\L\i\n\u\x* ]]
+++ jq -r --arg os Linux --arg dist 'Red Hat Enterprise Linux' --arg version 8 '.os[] | select(.name == $os) | .distributions[] | select(.description == $dist) | .versions | to_entries[] | .value[] | select(.version == $version) | .build_files[0].vsphere' project.json
++ vsphere_vars=vsphere.pkrvars.hcl
++ [[ Linux == *\L\i\n\u\x* ]]
+++ jq -r --arg os Linux --arg dist 'Red Hat Enterprise Linux' --arg version 8 '.os[] | select(.name == $os) | .distributions[] | select(.description == $dist) | .versions | to_entries[] | .value[] | select(.version == $version) | .build_files[0].build' project.json
++ build_vars=build.pkrvars.hcl
++ [[ Linux == *\L\i\n\u\x* ]]
+++ jq -r --arg os Linux --arg dist 'Red Hat Enterprise Linux' --arg version 8 '.os[] | select(.name == $os) | .distributions[] | select(.description == $dist) | .versions | to_entries[] | .value[] | select(.version == $version) | .build_files[0].ansible' project.json
++ ansible_vars=ansible.pkrvars.hcl
++ [[ Linux == *\L\i\n\u\x* ]]
+++ jq -r --arg os Linux --arg dist 'Red Hat Enterprise Linux' --arg version 8 '.os[] | select(.name == $os) | .distributions[] | select(.description == $dist) | .versions | to_entries[] | .value[] | select(.version == $version) | .build_files[0].proxy' project.json
++ proxy_vars=proxy.pkrvars.hcl
++ [[ Linux == *\L\i\n\u\x* ]]
+++ jq -r --arg os Linux --arg dist 'Red Hat Enterprise Linux' --arg version 8 '.os[] | select(.name == $os) | .distributions[] | select(.description == $dist) | .versions | to_entries[] | .value[] | select(.version == $version) | .build_files[0].common' project.json
++ common_vars=common.pkrvars.hcl
++ [[ Linux == *\L\i\n\u\x* ]]
+++ jq -r --arg os Linux --arg dist 'Red Hat Enterprise Linux' --arg version 8 '.os[] | select(.name == $os) | .distributions[] | select(.description == $dist) | .versions | to_entries[] | .value[] | select(.version == $version) | .build_files[0].network' project.json
++ network_vars=network.pkrvars.hcl
++ [[ Linux == *\L\i\n\u\x* ]]
+++ jq -r --arg os Linux --arg dist 'Red Hat Enterprise Linux' --arg version 8 '.os[] | select(.name == $os) | .distributions[] | select(.description == $dist) | .versions | to_entries[] | .value[] | select(.version == $version) | .build_files[0].storage' project.json
++ storage_vars=linux-storage.pkrvars.hcl
++ [[ Red Hat Enterprise Linux == *\R\e\d\ \H\a\t* ]]
+++ jq -r --arg os Linux --arg dist 'Red Hat Enterprise Linux' --arg version 8 '.os[] | select(.name == $os) | .distributions[] | select(.description == $dist) | .versions | to_entries[] | .value[] | select(.version == $version) | .build_files[0].rshm' project.json
++ rshm_vars=rhsm.pkrvars.hcl
++ [[ Red Hat Enterprise Linux == *\S\U\S\E* ]]
++ case "$dist" in
++ var_files=("vsphere_vars" "build_vars" "ansible_vars" "proxy_vars" "common_vars" "network_vars" "storage_vars" "rshm_vars" "BUILD_VARS")
++ validate_linux_username /home/admin/packer-rhel-vsphere/config/build.pkrvars.hcl
+++ grep build_username /home/admin/packer-rhel-vsphere/config/build.pkrvars.hcl
+++ awk -F '"' '{print $2}'
++ build_username=packer
++ [[ ! packer =~ ^[a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\\\$)$ ]]
++ validate_rhsm_offline /home/admin/packer-rhel-vsphere/config/linux-rhel-8.pkrvars.hcl /home/admin/packer-rhel-vsphere/config/rhsm.pkrvars.hcl
++ local iso_file_path=/home/admin/packer-rhel-vsphere/config/linux-rhel-8.pkrvars.hcl
++ local rhsm_vars_path=/home/admin/packer-rhel-vsphere/config/rhsm.pkrvars.hcl
++ local iso_file
+++ grep -E '^\s*iso_file\s*=' /home/admin/packer-rhel-vsphere/config/linux-rhel-8.pkrvars.hcl
+++ sed -E 's/.*=\s*"([^"]+)".*/\1/'
++ iso_file=rhel-8.10-x86_64-dvd.iso
++ [[ rhel-8.10-x86_64-dvd.iso == *boot* ]]
++ printf 'Starting the build of %s %s...\n\n' 'Red Hat Enterprise Linux' 8
 Starting the build of Red Hat Enterprise Linux 8...
 
-Error: Could not guess format of /home/admin/packer-rhel-vsphere/config/
++ command='packer build -force -on-error=abort -debug'
++ for var_file in "${var_files[@]}"
++ command+=' -var-file="/home/admin/packer-rhel-vsphere/config/vsphere.pkrvars.hcl"'
++ for var_file in "${var_files[@]}"
++ command+=' -var-file="/home/admin/packer-rhel-vsphere/config/build.pkrvars.hcl"'
++ for var_file in "${var_files[@]}"
++ command+=' -var-file="/home/admin/packer-rhel-vsphere/config/ansible.pkrvars.hcl"'
++ for var_file in "${var_files[@]}"
++ command+=' -var-file="/home/admin/packer-rhel-vsphere/config/proxy.pkrvars.hcl"'
++ for var_file in "${var_files[@]}"
++ command+=' -var-file="/home/admin/packer-rhel-vsphere/config/common.pkrvars.hcl"'
++ for var_file in "${var_files[@]}"
++ command+=' -var-file="/home/admin/packer-rhel-vsphere/config/network.pkrvars.hcl"'
++ for var_file in "${var_files[@]}"
++ command+=' -var-file="/home/admin/packer-rhel-vsphere/config/linux-storage.pkrvars.hcl"'
++ for var_file in "${var_files[@]}"
++ command+=' -var-file="/home/admin/packer-rhel-vsphere/config/rhsm.pkrvars.hcl"'
++ for var_file in "${var_files[@]}"
++ command+=' -var-file="/home/admin/packer-rhel-vsphere/config/linux-rhel-8.pkrvars.hcl"'
++ command+=' "/home/admin/packer-rhel-vsphere/builds/linux/rhel/8/"'
++ '[' 0 -eq 1 ']'
++ eval 'packer build -force -on-error=abort -debug -var-file="/home/admin/packer-rhel-vsphere/config/vsphere.pkrvars.hcl" -var-file="/home/admin/packer-rhel-vsphere/config/build.pkrvars.hcl" -var-file="/home/admin/packer-rhel-vsphere/config/ansible.pkrvars.hcl" -var-file="/home/admin/packer-rhel-vsphere/config/proxy.pkrvars.hcl" -var-file="/home/admin/packer-rhel-vsphere/config/common.pkrvars.hcl" -var-file="/home/admin/packer-rhel-vsphere/config/network.pkrvars.hcl" -var-file="/home/admin/packer-rhel-vsphere/config/linux-storage.pkrvars.hcl" -var-file="/home/admin/packer-rhel-vsphere/config/rhsm.pkrvars.hcl" -var-file="/home/admin/packer-rhel-vsphere/config/linux-rhel-8.pkrvars.hcl" "/home/admin/packer-rhel-vsphere/builds/linux/rhel/8/"'
+++ packer build -force -on-error=abort -debug -var-file=/home/admin/packer-rhel-vsphere/config/vsphere.pkrvars.hcl -var-file=/home/admin/packer-rhel-vsphere/config/build.pkrvars.hcl -var-file=/home/admin/packer-rhel-vsphere/config/ansible.pkrvars.hcl -var-file=/home/admin/packer-rhel-vsphere/config/proxy.pkrvars.hcl -var-file=/home/admin/packer-rhel-vsphere/config/common.pkrvars.hcl -var-file=/home/admin/packer-rhel-vsphere/config/network.pkrvars.hcl -var-file=/home/admin/packer-rhel-vsphere/config/linux-storage.pkrvars.hcl -var-file=/home/admin/packer-rhel-vsphere/config/rhsm.pkrvars.hcl -var-file=/home/admin/packer-rhel-vsphere/config/linux-rhel-8.pkrvars.hcl /home/admin/packer-rhel-vsphere/builds/linux/rhel/8/
+Debug mode enabled. Builds will not be parallelized.
+[1;32mvsphere-iso.linux-rhel: output will be in this color.[0m
 
-A var file must be suffixed with `.hcl` or `.json`.
+[1;32m==> vsphere-iso.linux-rhel: Removing the existing virtual machine at ocp-gym/gym-0600010stv-5x09g1zg/linux-rhel-8.10-master based on use of the '-force' option...[0m
+[1;32m==> vsphere-iso.linux-rhel: Attempting to convert the template at ocp-gym/gym-0600010stv-5x09g1zg/linux-rhel-8.10-master to a virtual machine...[0m
+[1;32m==> vsphere-iso.linux-rhel: Creating virtual machine...[0m
+[1;32m==> vsphere-iso.linux-rhel: Customizing hardware...[0m
+[1;32m==> vsphere-iso.linux-rhel: Adding SATA controller...[0m
+[1;32m==> vsphere-iso.linux-rhel: Mounting ISO images...[0m
+[1;32m==> vsphere-iso.linux-rhel: Adding configuration parameters...[0m
+[1;32m==> vsphere-iso.linux-rhel: Starting HTTP server on port 8075[0m
+[1;32m==> vsphere-iso.linux-rhel: Setting boot order...[0m
+[1;32m==> vsphere-iso.linux-rhel: Powering on virtual machine...[0m
+[1;32m==> vsphere-iso.linux-rhel: Waiting 2s for boot...[0m
+[1;32m==> vsphere-iso.linux-rhel: Serving HTTP requests at http://192.168.252.2:8075/.[0m
+[1;32m==> vsphere-iso.linux-rhel: Typing boot command...[0m
+[1;32m==> vsphere-iso.linux-rhel: Waiting for IP...[0m
+[1;32m==> vsphere-iso.linux-rhel: IP address: 192.168.252.155[0m
+[1;32m==> vsphere-iso.linux-rhel: Using SSH communicator to connect: 192.168.252.155[0m
+[1;32m==> vsphere-iso.linux-rhel: Waiting for SSH to become available...[0m
+[1;32m==> vsphere-iso.linux-rhel: Connected to SSH![0m
+[1;32m==> vsphere-iso.linux-rhel: Provisioning with Ansible...[0m
+[1;32m==> vsphere-iso.linux-rhel: Setting up proxy adapter for Ansible....[0m
+[1;32m==> vsphere-iso.linux-rhel: Executing Ansible Galaxy[0m
+[1;32m==> vsphere-iso.linux-rhel: Starting galaxy collection install process[0m
+[1;32m==> vsphere-iso.linux-rhel: Process install dependency map[0m
+[1;32m==> vsphere-iso.linux-rhel: Starting collection install process[0m
+[1;32m==> vsphere-iso.linux-rhel: Downloading https://galaxy.<sensitive>.com/api/v3/plugin/<sensitive>/content/published/collections/artifacts/<sensitive>-posix-1.5.4.tar.gz to /home/admin/.<sensitive>/tmp/<sensitive>-local-580575j5c2ipxx/tmpe5jabgwp/<sensitive>-posix-1.5.4-k4j03rjk[0m
+[1;32m==> vsphere-iso.linux-rhel: Installing '<sensitive>.posix:1.5.4' to '/home/admin/.<sensitive>/collections/<sensitive>_collections/<sensitive>/posix'[0m
+[1;32m==> vsphere-iso.linux-rhel: <sensitive>.posix:1.5.4 was installed successfully[0m
+[1;32m==> vsphere-iso.linux-rhel: Downloading https://galaxy.<sensitive>.com/api/v3/plugin/<sensitive>/content/published/collections/artifacts/community-general-8.6.0.tar.gz to /home/admin/.<sensitive>/tmp/<sensitive>-local-580575j5c2ipxx/tmpe5jabgwp/community-general-8.6.0-x4mywah0[0m
+[1;32m==> vsphere-iso.linux-rhel: Installing 'community.general:8.6.0' to '/home/admin/.<sensitive>/collections/<sensitive>_collections/community/general'[0m
+[1;32m==> vsphere-iso.linux-rhel: community.general:8.6.0 was installed successfully[0m
+[1;32m==> vsphere-iso.linux-rhel: Executing Ansible: <sensitive>-playbook -e <sensitive>_build_name="linux-rhel" -e <sensitive>_builder_type=vsphere-iso -e <sensitive>_http_addr=192.168.252.2:8075 --ssh-extra-args '-o IdentitiesOnly=yes' --extra-vars display_skipped_hosts=false --extra-vars build_username=<sensitive> --extra-vars build_key='<sensitive>' --extra-vars <sensitive>_username=<sensitive> --extra-vars <sensitive>_key='<sensitive>' --extra-vars enable_cloudinit=true -e <sensitive>_ssh_private_key_file=/tmp/<sensitive>-key4143912652 -i /tmp/<sensitive>-provisioner-<sensitive>3942866958 /home/admin/<sensitive>-rhel-vsphere/<sensitive>/linux-playbook.yml[0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: PLAY [Playbook for Linux] ******************************************************[0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [Gathering Facts] *********************************************************[0m
+[1;32m==> vsphere-iso.linux-rhel: ok: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [base : Update the operating system and install additional packages.] *****[0m
+[1;32m==> vsphere-iso.linux-rhel: included: /home/admin/<sensitive>-rhel-vsphere/<sensitive>/roles/base/tasks/redhat.yml for default[0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [base : Getting guest operating system information.] **********************[0m
+[1;32m==> vsphere-iso.linux-rhel: ok: [default] => {[0m
+[1;32m==> vsphere-iso.linux-rhel:     "msg": "OS: RedHat 8.10"[0m
+[1;32m==> vsphere-iso.linux-rhel: }[0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [base : Checking the Red Hat Subscription Manager status.] ****************[0m
+[1;32m==> vsphere-iso.linux-rhel: ok: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [base : Installing additional packages.] **********************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [base : Installing cloud-init.] *******************************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [users : Configure the operating system users.] ***************************[0m
+[1;32m==> vsphere-iso.linux-rhel: included: /home/admin/<sensitive>-rhel-vsphere/<sensitive>/roles/users/tasks/linux.yml for default[0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [users : Creating the local group for Ansible.] ***************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [users : Creating the sudo group.] ****************************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [users : Creating the local user for Ansible.] ****************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [users : Managing the authorized keys for the local users.] ***************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=None)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=None)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [users : Managing sudoers.d for the local users.] *************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=<sensitive>)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=<sensitive>)[0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [configure : Configure the operating system.] *****************************[0m
+[1;32m==> vsphere-iso.linux-rhel: included: /home/admin/<sensitive>-rhel-vsphere/<sensitive>/roles/configure/tasks/redhat.yml for default[0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [configure : Disconnecting from Red Hat Subscription Manager.] ************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [configure : Disable root login] ******************************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [configure : Enable public key authentication] ****************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [configure : Enable password authentication] ******************************[0m
+[1;32m==> vsphere-iso.linux-rhel: ok: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [configure : Disable cloud-init ssh module] *******************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [configure : Setting the hostname.] ***************************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [configure : Restarting the SSH daemon.] **********************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [configure : Message: Configuring cloud-init] *****************************[0m
+[1;32m==> vsphere-iso.linux-rhel: ok: [default] => {[0m
+[1;32m==> vsphere-iso.linux-rhel:     "msg": "Configuring cloud-init"[0m
+[1;32m==> vsphere-iso.linux-rhel: }[0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [configure : Ensure disable_vmware_customization is set to false in cloud.cfg] ***[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [configure : Set datasource_list in 90_dpkg.cfg] **************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [clean : Clean the operating system.] *************************************[0m
+[1;32m==> vsphere-iso.linux-rhel: included: /home/admin/<sensitive>-rhel-vsphere/<sensitive>/roles/clean/tasks/redhat.yml for default[0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [clean : Cleaning the Red Hat Subscription Manager logs.] *****************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [clean : Cleaning the audit logs.] ****************************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/var/log/audit/audit.log)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/var/log/btmp)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/var/log/boot.log)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/var/log/cron)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/var/log/dnf.log)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/var/log/lastlog)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/var/log/maillog)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/var/log/messages)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/var/log/secure)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/var/log/wtmp)[0m
+[1;32m==> vsphere-iso.linux-rhel: ok: [default] => (item=/var/log/yum.log)[0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [clean : Cleaning persistent udev rules.] *********************************[0m
+[1;32m==> vsphere-iso.linux-rhel: ok: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [clean : Finding the /tmp directories.] ***********************************[0m
+[1;32m==> vsphere-iso.linux-rhel: ok: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [clean : Cleaning the /tmp directories.] **********************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/tmp/ks-script-t_e3bz_j)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/tmp/ks-script-ausg82by)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/tmp/ks-script-19dzcsgx)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/tmp/systemd-private-9e38450f656b433ba4acc8610ef25a62-chronyd.service-VYMS9x)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/tmp/vmware-root_940-2689209484)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/tmp/systemd-private-9e38450f656b433ba4acc8610ef25a62-systemd-hostnamed.service-zrOLHm)[0m
+[1;32m==> vsphere-iso.linux-rhel: ok: [default] => (item=/tmp/<sensitive>_<sensitive>.builtin.find_payload_8fhscy56)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/var/tmp/systemd-private-9e38450f656b433ba4acc8610ef25a62-chronyd.service-66Iv5J)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/var/tmp/systemd-private-9e38450f656b433ba4acc8610ef25a62-systemd-hostnamed.service-tKEomR)[0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [clean : Finding the SSH host keys.] **************************************[0m
+[1;32m==> vsphere-iso.linux-rhel: ok: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [clean : Cleaning the SSH host keys.] *************************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/etc/ssh/ssh_host_ecdsa_key)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/etc/ssh/ssh_host_ecdsa_key.pub)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/etc/ssh/ssh_host_ed25519_key)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/etc/ssh/ssh_host_ed25519_key.pub)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/etc/ssh/ssh_host_rsa_key)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/etc/ssh/ssh_host_rsa_key.pub)[0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [clean : Emptying the /etc/machine-id.] ***********************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [clean : Removing /var/lib/dbus/machine-id.] ******************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [clean : Creating a symbolic link to /etc/machine-id.] ********************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [clean : Cleaning the shell history.] *************************************[0m
+[1;32m==> vsphere-iso.linux-rhel: ok: [default][0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: TASK [clean : Cleaning the install logs.] **************************************[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/root/anaconda-ks.cfg)[0m
+[1;32m==> vsphere-iso.linux-rhel: changed: [default] => (item=/root/original-ks.cfg)[0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: PLAY RECAP *********************************************************************[0m
+[1;32m==> vsphere-iso.linux-rhel: default                    : ok=36   changed=23   unreachable=0    failed=0    skipped=15   rescued=0    ignored=0[0m
+[1;32m==> vsphere-iso.linux-rhel:[0m
+[1;32m==> vsphere-iso.linux-rhel: Running shutdown command...[0m
+[1;32m==> vsphere-iso.linux-rhel: Deleting floppy drives...[0m
+[1;32m==> vsphere-iso.linux-rhel: Ejecting CD-ROM media...[0m
+[1;32m==> vsphere-iso.linux-rhel: Removing CD-ROM devices...[0m
+[1;32m==> vsphere-iso.linux-rhel: Reattaching CD-ROM devices...[0m
+[1;32m==> vsphere-iso.linux-rhel: Adding SATA controller...[0m
+[1;32m==> vsphere-iso.linux-rhel: Adding CD-ROM devices...[0m
+[1;32m==> vsphere-iso.linux-rhel: Converting virtual machine to template...[0m
+[1;32m==> vsphere-iso.linux-rhel: Closing sessions ....[0m
+[1;32m==> vsphere-iso.linux-rhel: Running post-processor:  (type manifest)[0m
+[1;32mBuild 'vsphere-iso.linux-rhel' finished after 8 minutes 20 seconds.[0m
 
-Error: Could not guess format of /home/admin/packer-rhel-vsphere/config/
+==> Wait completed after 8 minutes 20 seconds
 
-A var file must be suffixed with `.hcl` or `.json`.
-
-Error: Could not guess format of /home/admin/packer-rhel-vsphere/config/
-
-A var file must be suffixed with `.hcl` or `.json`.
-
-Error: Could not guess format of /home/admin/packer-rhel-vsphere/config/
-
-A var file must be suffixed with `.hcl` or `.json`.
-
-Error: Could not guess format of /home/admin/packer-rhel-vsphere/config/
-
-A var file must be suffixed with `.hcl` or `.json`.
-
-Error: Could not guess format of /home/admin/packer-rhel-vsphere/config/
-
-A var file must be suffixed with `.hcl` or `.json`.
-
-Error: Could not guess format of /home/admin/packer-rhel-vsphere/config/
-
-A var file must be suffixed with `.hcl` or `.json`.
-
-Error: Could not guess format of /home/admin/packer-rhel-vsphere/config/
-
-A var file must be suffixed with `.hcl` or `.json`.
-
-
+==> Builds finished. The artifacts of successful builds are:
+--> vsphere-iso.linux-rhel: linux-rhel-8.10-master
+--> vsphere-iso.linux-rhel: linux-rhel-8.10-master
++ return
++ return
++ return
++ '[' true = false ']'

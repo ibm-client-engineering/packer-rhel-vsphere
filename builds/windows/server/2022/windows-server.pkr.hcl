@@ -65,7 +65,7 @@ locals {
 source "vsphere-iso" "windows-server-standard-core" {
 
   // vCenter Server Endpoint Settings and Credentials
-  vcenter_server      = var.vsphere_endpoint
+  vcenter_server      = var.vsphere_hostname
   username            = var.vsphere_username
   password            = var.vsphere_password
   insecure_connection = var.vsphere_insecure_connection
@@ -172,7 +172,7 @@ source "vsphere-iso" "windows-server-standard-core" {
 source "vsphere-iso" "windows-server-standard-dexp" {
 
   // vCenter Server Endpoint Settings and Credentials
-  vcenter_server      = var.vsphere_endpoint
+  vcenter_server      = var.vsphere_hostname
   username            = var.vsphere_username
   password            = var.vsphere_password
   insecure_connection = var.vsphere_insecure_connection
@@ -280,7 +280,7 @@ source "vsphere-iso" "windows-server-standard-dexp" {
 source "vsphere-iso" "windows-server-datacenter-core" {
 
   // vCenter Server Endpoint Settings and Credentials
-  vcenter_server      = var.vsphere_endpoint
+  vcenter_server      = var.vsphere_hostname
   username            = var.vsphere_username
   password            = var.vsphere_password
   insecure_connection = var.vsphere_insecure_connection
@@ -390,7 +390,7 @@ source "vsphere-iso" "windows-server-datacenter-core" {
 source "vsphere-iso" "windows-server-datacenter-dexp" {
 
   // vCenter Server Endpoint Settings and Credentials
-  vcenter_server      = var.vsphere_endpoint
+  vcenter_server      = var.vsphere_hostname
   username            = var.vsphere_username
   password            = var.vsphere_password
   insecure_connection = var.vsphere_insecure_connection
@@ -548,7 +548,7 @@ build {
       vsphere_host             = var.vsphere_host
       vsphere_datacenter       = var.vsphere_datacenter
       vsphere_datastore        = var.vsphere_datastore
-      vsphere_endpoint         = var.vsphere_endpoint
+      vsphere_hostname         = var.vsphere_hostname
       vsphere_folder           = var.vsphere_folder
     }
   }

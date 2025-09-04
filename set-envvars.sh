@@ -84,7 +84,7 @@ done
 
 # vSphere Credentials
 echo -e '\n> Set the vSphere credentials.'
-read -r -p "Enter the FQDN of your vCenter Server instance: " vsphere_endpoint
+read -r -p "Enter the FQDN of your vCenter Server instance: " vsphere_hostname
 read -r -p "Enter the username for the user account: " vsphere_username
 read -r -s -p "Enter the password for the user account: " vsphere_password
 echo # Needed for line break.
@@ -217,7 +217,7 @@ fi
 
 echo -e '\n> Setting the vSphere credentials...'
 # vSphere Credentials
-export PKR_VAR_vsphere_endpoint="${vsphere_endpoint}"
+export PKR_VAR_vsphere_hostname="${vsphere_hostname}"
 export PKR_VAR_vsphere_username="${vsphere_username}"
 export PKR_VAR_vsphere_password="${vsphere_password}"
 export PKR_VAR_vsphere_insecure_connection="${vsphere_insecure_connection}"
@@ -318,7 +318,7 @@ case $display_environmental_variables in
 
 	# vSphere Credentials
 	echo -e '\nvSphere Credentials'
-	echo - PKR_VAR_vsphere_endpoint: "$PKR_VAR_vsphere_endpoint"
+	echo - PKR_VAR_vsphere_hostname: "$PKR_VAR_vsphere_hostname"
 	echo - PKR_VAR_vsphere_username: "$PKR_VAR_vsphere_username"
 	echo - PKR_VAR_vsphere_password: "$PKR_VAR_vsphere_password"
 	echo - PKR_VAR_vsphere_insecure_connection: "$PKR_VAR_vsphere_insecure_connection"

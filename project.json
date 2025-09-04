@@ -101,6 +101,22 @@
                                         "rshm": "rhsm.pkrvars.hcl"
                                     }
                                 ]
+                            },
+                            {
+                                "version": "9",
+                                "enabled": "true",
+                                "build_files": [
+                                    {
+                                        "vsphere": "vsphere.pkrvars.hcl",
+                                        "build": "build.pkrvars.hcl",
+                                        "ansible": "ansible.pkrvars.hcl",
+                                        "proxy": "proxy.pkrvars.hcl",
+                                        "common": "common.pkrvars.hcl",
+                                        "network": "network.pkrvars.hcl",
+                                        "storage": "linux-storage.pkrvars.hcl",
+                                        "rshm": "rhsm.pkrvars.hcl"
+                                    }
+                                ]
                             }
                         ],
                         "8": [
@@ -114,6 +130,22 @@
                                         "checksum": "9b3c8e31bc2cdd2de9cf96abb3726347f5840ff3b176270647b3e66639af291b"
                                     }
                                 ],
+                                "build_files": [
+                                    {
+                                        "vsphere": "vsphere.pkrvars.hcl",
+                                        "build": "build.pkrvars.hcl",
+                                        "ansible": "ansible.pkrvars.hcl",
+                                        "proxy": "proxy.pkrvars.hcl",
+                                        "common": "common.pkrvars.hcl",
+                                        "network": "network.pkrvars.hcl",
+                                        "storage": "linux-storage.pkrvars.hcl",
+                                        "rshm": "rhsm.pkrvars.hcl"
+                                    }
+                                ]
+                            },
+                            {
+                                "version": "8",
+                                "enabled": "true",
                                 "build_files": [
                                     {
                                         "vsphere": "vsphere.pkrvars.hcl",

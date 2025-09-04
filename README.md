@@ -584,7 +584,7 @@ Edit the `config/vsphere.pkrvars.hcl` file to configure the following:
 
 ```hcl
 // vSphere Credentials
-vsphere_endpoint            = "ocpgym-vc.techzone.ibm.local"
+vsphere_hostname            = "ocpgym-vc.techzone.ibm.local"
 vsphere_username            = "gymuser-xxxxxxxx@techzone.ibm.local"
 vsphere_password            = "xxxxyyyy"
 vsphere_insecure_connection = true

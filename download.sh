@@ -333,7 +333,7 @@ select_version() {
         # Parse the JSON file to get the versions for the selected distribution Windows
         version_descriptions=$(jq -r --arg os "$os" --arg dist "$dist" '.os[] | select(.name == $os) | .types[] | select(.description == $dist) | .versions | keys[]' $json_path)
     else
-        version_descriptions=$(jq -r --arg os "$os" --arg dist "$dist" '.os[] | select(.name == $os) | .distributions[] | select(.description == $dist) | .versions | to_entries[] | .value[].version' $json_path)
+        version_descriptions=$(jq -r --arg os "$os" --arg dist "$dist" '.os[] | select(.name == $os) | .distributions[] | select(.description == $dist) | .versions | to_entries[] | .value[] | select(has("architectures")) | .version' $json_path)
     fi
 
     # Convert the version descriptions to an array and sort it in descending order.
