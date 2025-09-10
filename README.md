@@ -224,7 +224,8 @@ significantly.
 
 In order to download the ISOs directly from Red Hat, an RHSM API offline token is required.
 
-1. Go to the [Red Hat API Tokens page](https://access.redhat.com/management/api) on the Red Hat Customer Portal.
+1. Go to the [Red Hat API Tokens page](https://access.redhat.com/management/api) on the Red Hat Customer Portal. If you don't have the proper subscriptions for your account, you can use a 60 day free trial on a personal developer account. Otherwise, you will need to manually
+download the ISO needed for your VM template.
 
 2. Under `Generate an offline token`, click `GENERATE TOKEN`.
 
