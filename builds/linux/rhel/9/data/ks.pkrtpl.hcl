@@ -84,10 +84,10 @@ set -x
 
 /usr/sbin/subscription-manager register --username ${rhsm_username} --password ${rhsm_password} --autosubscribe --force
 /usr/sbin/subscription-manager repos --enable "codeready-builder-for-rhel-9-x86_64-rpms"
-This retry loop is critical for addressing intermittent timing issues.
-It attempts to run `dnf install` up to 5 times with a 10-second delay
-if the command fails, which gives the subscription-manager and Red Hat CDN
-time to synchronize.
+# This retry loop is critical for addressing intermittent timing issues.
+# It attempts to run `dnf install` up to 5 times with a 10-second delay
+# if the command fails, which gives the subscription-manager and Red Hat CDN
+# time to synchronize.
 RETRY_COUNT=0
 MAX_RETRIES=5
 SUCCESS=false
