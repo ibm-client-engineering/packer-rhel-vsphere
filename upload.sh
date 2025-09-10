@@ -203,7 +203,7 @@ print_message info "Checking for datastore folder '$DATASTORE_FOLDER' and creati
 govc datastore.mkdir -ds "$DATASTORE_NAME" "$DATASTORE_FOLDER" &>/dev/null || true
 
 # Construct the full datastore path for the upload.
-UPLOAD_PATH="[$DATASTORE_NAME] $DATASTORE_FOLDER/$(basename "$ISO_FILE_PATH")"
+UPLOAD_PATH="$DATASTORE_FOLDER/$(basename "$ISO_FILE_PATH")"
 
 print_message info "Uploading '$(basename "$ISO_FILE_PATH")' to vSphere datastore '$DATASTORE_NAME'..."
 print_message info "Target path: '$UPLOAD_PATH'"

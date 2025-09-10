@@ -83,6 +83,30 @@ skipx
 set -x
 
 /usr/sbin/subscription-manager register --username ${rhsm_username} --password ${rhsm_password} --autosubscribe --force
+/usr/sbin/subscription-manager repos --enable "codeready-builder-for-rhel-8-x86_64-rpms"
+# This retry loop is critical for addressing intermittent timing issues.
+# It attempts to run `dnf install` up to 5 times with a 10-second delay
+# if the command fails, which gives the subscription-manager and Red Hat CDN
+# time to synchronize.
+RETRY_COUNT=0
+MAX_RETRIES=5
+SUCCESS=false
+
+while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+  if dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm; then
+    SUCCESS=true
+    break
+  else
+    echo "dnf install failed. Retrying in 10 seconds..."
+    sleep 10
+    RETRY_COUNT=$((RETRY_COUNT+1))
+  fi
+done
+
+if [ "$SUCCESS" = false ]; then
+  echo "dnf install failed after $MAX_RETRIES attempts. Exiting."
+  exit 1
+fi
 
 # free up space, only need @vmware-guest
 dnf remove -y linux-firmware

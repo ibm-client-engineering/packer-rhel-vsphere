@@ -287,7 +287,7 @@ Enter your Red Hat Subscription Manager offline token:
 Enter your Red Hat Subscription Manager offline token again:
 ```
 
-6. The download will start.
+6. The download will start. After download completes there will be a pause while the verification is done. Select `q` after a successful download.
 
 ```shell
 Downloading: rhel-8.10-x86_64-dvd.iso => iso/linux/red-hat-enterprise-linux/8.10/amd64.
@@ -374,7 +374,7 @@ Found the following ISO files:
 Please select an ISO to upload (1-2):
 ```
 
-3. Enter details for connecting to vSphere:
+3. If prompted, enter details for connecting to vSphere:
 
 ```shell
 Enter the vCenter URL [Default: https://vcenter.example.com]:
@@ -421,6 +421,58 @@ value as the first argument.
 
 ### Configuration Variables
 
+<details>
+<summary>IBM TechZone Tip</summary>
+Use the following commands to configure some of the variables in an IBM TechZone environment.
+
+---
+
+```shell
+# Ensure yq is installed and accessible in your PATH.
+# Installation instructions: https://github.com/mikefarah/yq#install
+if ! command -v yq &> /dev/null; then
+    echo "Error: 'yq' is not installed. Please install it to continue."
+    exit 1
+fi
+
+# Define the source YAML file path
+YAML_FILE=~/vmware-ipi.yaml
+
+# --- Update vsphere.pkrvars.hcl ---
+echo "Updating vsphere.pkrvars.hcl..."
+vsphere_hostname=$(yq e '.vsphere_hostname' "$YAML_FILE")
+vsphere_username=$(yq e '.vsphere_username' "$YAML_FILE")
+vsphere_password=$(yq e '.vsphere_password' "$YAML_FILE")
+vsphere_datacenter=$(yq e '.vsphere_datacenter' "$YAML_FILE")
+vsphere_cluster=$(yq e '.vsphere_cluster' "$YAML_FILE")
+vsphere_datastore=$(yq e '.vsphere_datastore' "$YAML_FILE")
+vsphere_network=$(yq e '.vsphere_network' "$YAML_FILE")
+vsphere_folder=$(yq e '.vsphere_folder' "$YAML_FILE")
+vsphere_resource_pool=$(yq e '.vsphere_resource_pool' "$YAML_FILE")
+
+# Perform in-place substitutions using sed.
+# The 'sed' commands handle the replacement of the existing values.
+sed -i \
+    -e "s|vsphere_hostname\s*=\s*\".*\"|vsphere_hostname = \"$vsphere_hostname\"|" \
+    -e "s|vsphere_username\s*=\s*\".*\"|vsphere_username = \"$vsphere_username\"|" \
+    -e "s|vsphere_password\s*=\s*\".*\"|vsphere_password = \"$vsphere_password\"|" \
+    -e "s|vsphere_datacenter\s*=\s*\".*\"|vsphere_datacenter = \"$vsphere_datacenter\"|" \
+    -e "s|vsphere_cluster\s*=\s*\".*\"|vsphere_cluster = \"$vsphere_cluster\"|" \
+    -e "s|vsphere_datastore\s*=\s*\".*\"|vsphere_datastore = \"$vsphere_datastore\"|" \
+    -e "s|vsphere_network\s*=\s*\".*\"|vsphere_network = \"$vsphere_network\"|" \
+    -e "s|vsphere_folder\s*=\s*\".*\"|vsphere_folder = \"$(echo "$vsphere_folder" | sed -E 's|^/IBMCloud/vm/||')\"|" \
+    -e "s|vsphere_resource_pool\s*=\s*\".*\"|vsphere_resource_pool = \"$(echo "$vsphere_resource_pool" | sed -E 's|^/IBMCloud/host/ocp-gym/Resources/||')\"|" \
+    config/vsphere.pkrvars.hcl
+
+# --- Update common.pkrvars.hcl ---
+echo "Updating common.pkrvars.hcl..."
+sed -i -E "s|common_iso_datastore\s*=\s*\".*\"|common_iso_datastore = \"$vsphere_datastore\"|" config/common.pkrvars.hcl
+
+echo "All variables have been updated successfully."
+```
+
+</details>
+
 #### Datastore
 
 Edit the `config/common.pkrvars.hcl` file to configure the location of the datastore for the boot ISO.
@@ -440,7 +492,7 @@ update the ISO path and file for each guest operating system in the configuratio
 ```hcl title="config/linux-rhel-9.pkrvars.hcl"
 iso_datastore_path       = "iso"
 iso_content_library_item = ""
-iso_file                 = "rhel-9.4-x86_64-boot.iso"
+iso_file                 = "rhel-9.4-x86_64-dvd.iso"
 ```
 
 #### Build
@@ -477,7 +529,7 @@ Generated Salt: <generated_salt>
 Encrypted Password: <encrypted_password>
 ```
 
-Generate a public key for the `build_key` for public key authentication.
+**Required:** Generate a public key for the `build_key` for public key authentication.
 
 ```shell
 ssh-keygen -t ecdsa -b 521 -C "<name@example.com>"
@@ -518,7 +570,7 @@ A random password is auto-generated for the Ansible user.
 
 #### Common
 
-Edit the `config/common.pkrvars.hcl` file to configure the following common variables:
+Edit the `config/common.pkrvars.hcl` file to configure the following common variables (defaults should work):
 
 ```hcl
 // Virtual Machine Settings
@@ -556,7 +608,7 @@ common_shutdown_timeout  = "15m"
 common_hcp_packer_registry_enabled = false
 ```
 
-#### Data Source
+#### Data Source (Optional)
 
 The default provisioning data source for Linux machine image builds is `http`. This is used to serve the kickstart files to the Linux guest operating system during the build.
 
@@ -579,6 +631,8 @@ common_http_ip = "192.168.252.2"
 ```
 
 #### VMware vSphere
+
+Skip this section if you used the IBM Techzone Tip above to set variables.
 
 Edit the `config/vsphere.pkrvars.hcl` file to configure the following:
 
@@ -624,7 +678,7 @@ sudo ufw reload
 ```
 </details>
 
-### Red Hat Installation Methods (Online and Offline)
+### Red Hat Credentials
 
 This Packer build supports both online and offline installation methods for Red Hat Enterprise Linux (RHEL). Both methods are designed to build a complete system image, but they differ in how they obtain the necessary packages.
 
@@ -632,7 +686,7 @@ In either scenario, you must provide a **username and password** that will be us
 
 #### Online Installation
 
-This method uses a minimal boot ISO image to fetch all packages directly from Red Hat's Content Delivery Network (CDN) during the build. This ensures you are always installing the latest, most up-to-date packages and security patches. This approach also eliminates the need to download and upload a large 10+ GB full DVD ISO, making the process faster and more efficient.
+This method uses a minimal boot ISO image to fetch all packages directly from Red Hat's Content Delivery Network (CDN) during the build. This ensures you are always installing the latest, most up-to-date packages and security patches.
 
 **Prerequisites:**
 To successfully complete an online build, you must have an active, paid Red Hat subscription or a Partner Connect account and provide your Red Hat Subscription Management credentials.
@@ -647,6 +701,13 @@ To successfully complete an online build, you must have an active, paid Red Hat 
 
 #### Offline Installation (default)
 
+This method uses a full DVD ISO image that contains all the packages needed to install RHEL. This approach is ideal for environments with no internet access or for times when you need to ensure the build is from a specific version without any subsequent updates. With this method, you still need to provide your Red Hat credentials to set up the system's user account, but no activation key or internet connection is required during the build process itself.
+
+**Prerequisites:**
+To successfully complete an offline build, you need only provide your Red Hat Subscription Management credentials.
+
+- **RHSM Credentials:** Your Red Hat Subscription Management username and password. This is typically your login credentials to Red Hat.
+
 #### Configure the Variables
 Regardless of your chosen installation method, you will need to edit the config/rhsm.pkrvars.hcl file to provide the necessary information. For an online installation, you must fill in all fields. For an offline installation, you can leave the rhsm_org and rhsm_key fields empty.
 
@@ -659,8 +720,6 @@ rhsm_password = "myredhatpasswordformyusername"
 #rhsm_org = "12123429"
 #rhsm_key = "packer-rhel9-key"
 ```
-
-This method uses a full DVD ISO image that contains all the packages needed to install RHEL. This approach is ideal for environments with no internet access or for times when you need to ensure the build is from a specific version without any subsequent updates. With this method, you still need to provide your Red Hat credentials to set up the system's user account, but no activation key or internet connection is required during the build process itself.
 
 ## Build the Images
 

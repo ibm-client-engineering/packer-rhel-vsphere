@@ -19,9 +19,9 @@ vm_guest_os_type = "rhel8_64Guest"
 vm_firmware = "efi"
 
 // Removable Media Settings
-iso_datastore_path       = "iso/linux/rhel/8/amd64"
-iso_content_library_item = "rhel-8.10-x86_64-boot"
-iso_file                 = "rhel-8.10-x86_64-boot.iso"
+iso_datastore_path       = "iso"
+iso_content_library_item = ""
+iso_file                 = "rhel-8.10-x86_64-dvd.iso"
 
 // Include cloud-init in guest OS build
 vm_guest_os_cloudinit = true

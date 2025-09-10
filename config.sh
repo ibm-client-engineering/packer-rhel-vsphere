@@ -76,7 +76,7 @@ fi
 
 cp -av "${script_path}"/builds/*.pkrvars.hcl.example "${config_path}" 2>&1 >/dev/null
 
-find "${script_path}"/builds/rhel/ -type f -name "*.pkrvars.hcl.example" -print0 | while IFS= read -r -d $'\0' srcfile; do
+find "${script_path}"/builds/linux/rhel/ -type f -name "*.pkrvars.hcl.example" -print0 | while IFS= read -r -d $'\0' srcfile; do
     srcdir=$(dirname "${srcfile}" | tr -s /)
     dstfile=$(echo "${srcdir#"${script_path}"/builds/}" | tr '/' '-')
     cp -av "${srcfile}" "${config_path}/${dstfile}.pkrvars.hcl.example" 2>&1 >/dev/null
